@@ -245,7 +245,11 @@ const Placeholder = ({ h = 120 }: { h?: number }) => (
   </div>
 );
 
-function LabsView() {
+function LabsView({
+  onChangeView,
+}: {
+  onChangeView: (v: ViewState) => void;
+}) {
   return (
     <>
       <SectionShell eyebrow="North Star" title="Enhance human intelligence.">
@@ -274,7 +278,10 @@ function LabsView() {
                   We design drug therapies for the hardest problems in the brain,
                   from ADHD in childhood to cognitive decline in old age.
                 </p>
-                <button className="text-sm font-semibold text-[#3E317D] hover:text-[#2e245e]">
+                <button
+                  onClick={() => onChangeView("bio")}
+                  className="text-sm font-semibold text-[#3E317D] hover:text-[#2e245e]"
+                >
                   Explore →
                 </button>
               </div>
@@ -292,7 +299,10 @@ function LabsView() {
                   that cross the blood-brain barrier, and the biology that decides
                   whether they work.
                 </p>
-                <button className="text-sm font-semibold text-[#3E317D] hover:text-[#2e245e]">
+                <button
+                  onClick={() => onChangeView("ai")}
+                  className="text-sm font-semibold text-[#3E317D] hover:text-[#2e245e]"
+                >
                   Explore →
                 </button>
               </div>
@@ -933,10 +943,16 @@ function AIView() {
   );
 }
 
-export default function Sections({ view }: { view: ViewState }) {
+export default function Sections({
+  view,
+  onChangeView,
+}: {
+  view: ViewState;
+  onChangeView: (v: ViewState) => void;
+}) {
   return (
     <div className="transition-opacity duration-200" key={view}>
-      {view === "labs" && <LabsView />}
+      {view === "labs" && <LabsView onChangeView={onChangeView} />}
       {view === "bio" && <BioView />}
       {view === "ai" && <AIView />}
     </div>

@@ -11,6 +11,13 @@ export default function Home() {
   const [view, setView] = useState<ViewState>("labs");
   const [navVisible, setNavVisible] = useState(false);
 
+  const handleChangeView = (v: ViewState) => {
+    setView(v);
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: window.innerHeight, behavior: "smooth" });
+    }
+  };
+
   useEffect(() => {
     const onScroll = () => setNavVisible(window.scrollY > 400);
     onScroll();
@@ -34,13 +41,13 @@ export default function Home() {
         />
       </div>
 
-      <Nav view={view} onChange={setView} visible={navVisible} />
+      <Nav view={view} onChange={handleChangeView} visible={navVisible} />
 
       {/* Spacer — page content slides up under the shrinking video */}
       <div style={{ height: "100dvh" }} />
 
       <main className="relative z-20 bg-white">
-        <Sections view={view} />
+        <Sections view={view} onChangeView={handleChangeView} />
         <Partners />
         <footer
           id="contact"
