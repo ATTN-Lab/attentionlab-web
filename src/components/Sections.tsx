@@ -898,9 +898,9 @@ function AIView() {
               </p>
               <a
                 href="mailto:temi@attentionlab.ai?subject=BBB-Nuke%20API%20Access"
-                className="text-sm font-semibold text-[#3E317D] hover:text-[#2e245e]"
+                className="inline-block text-sm font-semibold text-[#3E317D] hover:text-[#2e245e] underline underline-offset-4"
               >
-                Contact for API access →
+                temi@attentionlab.ai
               </a>
             </div>
           </div>
@@ -932,9 +932,9 @@ function AIView() {
               </div>
               <a
                 href="mailto:temi@attentionlab.ai?subject=BBB-Nuke%20Enterprise"
-                className="text-sm font-semibold text-[#3E317D] hover:text-[#2e245e]"
+                className="inline-block text-sm font-semibold text-[#3E317D] hover:text-[#2e245e] underline underline-offset-4"
               >
-                Contact for access →
+                temi@attentionlab.ai
               </a>
             </div>
           </div>
