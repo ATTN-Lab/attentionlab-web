@@ -42,7 +42,7 @@ export default function Nav({ view, onChange, visible }: NavProps) {
         </div>
         <div className="flex items-center gap-3 sm:gap-4 shrink-0">
           <a
-            href="/team"
+            href="#team"
             className="text-xs sm:text-sm text-gray-600 hover:text-black"
           >
             Team

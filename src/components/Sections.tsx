@@ -443,7 +443,137 @@ function LabsView({
         </div>
       </section>
 
+      {/* Team */}
+      <section id="team" className="py-20 border-b border-gray-100">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-xs uppercase tracking-[0.2em] text-gray-700 font-semibold mb-3">
+            The Team
+          </div>
+          <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
+            Built by scientists.
+          </h2>
+          <p className="text-gray-600 text-lg leading-relaxed max-w-2xl mb-12">
+            Pharmacologists, neuroscientists, bioengineers, and AI researchers
+            building at the intersection of the brain and machine intelligence.
+          </p>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
+            {[
+              {
+                name: "Temitope Sobodu, PhD",
+                role: "Founder & CEO",
+                tag: "Strategy & Drug Discovery",
+                src: "/team/temi.png",
+                bio: "Temi is a pharmacologist focused on optimizing AI models for early drug discovery, and sets the strategic direction and roadmap for Attention Labs. He holds a PhD in pharmacology and brings prior business development experience from Pfizer and Sanofi, combining scientific depth with strategic leadership.",
+              },
+              {
+                name: "Noah Abasciano",
+                role: "Founding Team · Data",
+                tag: "Data Science & Bioinformatics",
+                src: "/team/noah.png",
+                bio: "Noah is a data scientist, software developer, and geneticist with a track record of success in bioinformatics and clinical research, driven by a passion for solving complex problems in biotech.",
+              },
+              {
+                name: "Hamid Hadipour",
+                role: "Founding Team · AI",
+                tag: "Machine Learning & Drug Discovery",
+                src: "/team/hamid.png",
+                bio: "Hamid is an AI scientist with a master's in computer science and experience in AI research and building practical ML applications in the drug discovery industry.",
+              },
+              {
+                name: "Abhishek Poddar, PhD",
+                role: "Founding Team · Neuroscience",
+                tag: "Molecular Biology & Preclinical Validation",
+                src: "/team/abhishek.png",
+                bio: "Abhishek is a neuroscientist and molecular biologist with extensive expertise in in vitro modeling and preclinical validation. He is a postdoctoral researcher at Harvard-MGH, specializing in cellular transcriptomic pathways.",
+              },
+              {
+                name: "Jack Rudrum, PhD",
+                role: "Founding Team · Bioengineering",
+                tag: "Blood-Brain Barrier Models",
+                src: "/team/jack.png",
+                bio: "Jack is a bioengineer specializing in developing in vitro blood-brain barrier models. He is a PhD candidate in the Bioengineering Department at MIT.",
+              },
+            ].map((m) => (
+              <TeamFlipCard key={m.name} member={m} />
+            ))}
+          </div>
+          <p className="text-center text-gray-400 text-xs mt-6">
+            Click a card to flip it.
+          </p>
+        </div>
+      </section>
+
     </>
+  );
+}
+
+function TeamFlipCard({
+  member,
+}: {
+  member: {
+    name: string;
+    role: string;
+    tag: string;
+    src: string;
+    bio: string;
+  };
+}) {
+  const [flipped, setFlipped] = useState(false);
+  return (
+    <div
+      className="relative w-full cursor-pointer"
+      style={{ perspective: "1200px" }}
+      onClick={() => setFlipped(!flipped)}
+    >
+      <div
+        className="relative w-full transition-transform duration-700 ease-in-out"
+        style={{
+          transformStyle: "preserve-3d",
+          transform: flipped ? "rotateY(-180deg)" : "rotateY(0deg)",
+        }}
+      >
+        {/* Front — photo */}
+        <div
+          className="w-full rounded-2xl overflow-hidden"
+          style={{ backfaceVisibility: "hidden" }}
+        >
+          <div className="relative aspect-[3/4] bg-gray-900">
+            <img
+              src={member.src}
+              alt={member.name}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+              <div className="text-white font-bold text-base leading-tight">
+                {member.name}
+              </div>
+              <div className="text-white/70 text-xs mt-1">{member.role}</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Back — bio */}
+        <div
+          className="absolute inset-0 w-full rounded-2xl overflow-hidden"
+          style={{
+            backfaceVisibility: "hidden",
+            transform: "rotateY(180deg)",
+          }}
+        >
+          <div className="aspect-[3/4] bg-gray-950 p-5 flex flex-col justify-center text-white">
+            <div className="text-xs uppercase tracking-[0.2em] text-[#9d5cff] font-semibold mb-2">
+              {member.tag}
+            </div>
+            <div className="text-base font-bold mb-1">{member.name}</div>
+            <div className="text-white/60 text-xs mb-4">{member.role}</div>
+            <p className="text-white/80 text-xs leading-relaxed">
+              {member.bio}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
