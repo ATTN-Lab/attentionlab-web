@@ -9,19 +9,14 @@ export const metadata: Metadata = {
 
 const CONFIG_DESKTOP = `{
   "mcpServers": {
-    "bbb-nuke": {
-      "command": "npx",
-      "args": ["-y", "@attention-labs/bbb-nuke-mcp"],
-      "env": {
-        "BBB_NUKE_API_KEY": "your-api-key-here"
-      }
+    "bbnuke": {
+      "type": "url",
+      "url": "https://mcp.attentionlab.ai/mcp"
     }
   }
 }`;
 
-const CLAUDE_CODE_CMD = `claude mcp add bbb-nuke \\
-  --command "npx -y @attention-labs/bbb-nuke-mcp" \\
-  --env BBB_NUKE_API_KEY=your-api-key-here`;
+const CLAUDE_CODE_CMD = `claude mcp add bbnuke --transport http https://mcp.attentionlab.ai/mcp`;
 
 const EXAMPLE_PROMPTS = [
   "Score the molecule CN1CCC[C@H]1c1cccnc1 for blood-brain barrier penetration.",

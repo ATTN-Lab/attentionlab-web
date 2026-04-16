@@ -875,7 +875,7 @@ function AIView() {
                 session can screen up to 1,000 compounds in 24 hours.
               </p>
               <div className="inline-block px-3 py-1.5 rounded-md bg-gray-900 text-gray-100 text-sm font-mono">
-                claude mcp add bbb-nuke
+                claude mcp add bbnuke --transport http https://mcp.attentionlab.ai/mcp
               </div>
             </div>
           </div>
@@ -894,9 +894,9 @@ function AIView() {
               </p>
               <a
                 href="mailto:temi@attentionlab.ai?subject=BBB-Nuke%20API%20Access"
-                className="inline-block text-sm font-semibold text-[#3E317D] hover:text-[#2e245e] underline underline-offset-4"
+                className="inline-block px-4 py-2 text-sm font-semibold rounded-full bg-[#3E317D] text-white hover:bg-[#2e245e] transition-colors"
               >
-                temi@attentionlab.ai
+                Request access →
               </a>
             </div>
           </div>
@@ -928,9 +928,9 @@ function AIView() {
               </div>
               <a
                 href="mailto:temi@attentionlab.ai?subject=BBB-Nuke%20Enterprise"
-                className="inline-block text-sm font-semibold text-[#3E317D] hover:text-[#2e245e] underline underline-offset-4"
+                className="inline-block px-4 py-2 text-sm font-semibold rounded-full bg-[#3E317D] text-white hover:bg-[#2e245e] transition-colors"
               >
-                temi@attentionlab.ai
+                Request access →
               </a>
             </div>
           </div>
