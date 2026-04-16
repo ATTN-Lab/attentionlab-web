@@ -363,17 +363,13 @@ function LabsView({
           {/* CTAs */}
           <div className="flex flex-wrap gap-4">
             <a
-              href="https://api.attentionlab.ai/docs"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="mailto:temi@attentionlab.ai?subject=BBB-Nuke%20API%20Access"
               className="px-6 py-3 rounded-full bg-[#3E317D] text-white font-semibold hover:bg-[#2e245e] transition-colors"
             >
               REST API
             </a>
             <a
-              href="https://mcp.attentionlab.ai/mcp"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/mcp"
               className="px-6 py-3 rounded-full border-2 border-[#3E317D] text-[#3E317D] font-semibold hover:bg-[#3E317D] hover:text-white transition-colors"
             >
               Use with Claude
