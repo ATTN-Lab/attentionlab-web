@@ -874,9 +874,12 @@ function AIView() {
                 next round of analogs — all in the same chat. A single agent
                 session can screen up to 1,000 compounds in 24 hours.
               </p>
-              <div className="inline-block px-3 py-1.5 rounded-md bg-gray-900 text-gray-100 text-sm font-mono">
-                claude mcp add bbnuke --transport http https://mcp.attentionlab.ai/mcp
-              </div>
+              <a
+                href="/mcp"
+                className="inline-block px-5 py-2.5 rounded-full border-2 border-[#3E317D] text-[#3E317D] font-semibold hover:bg-[#3E317D] hover:text-white transition-colors text-sm"
+              >
+                Use with Claude →
+              </a>
             </div>
           </div>
 
