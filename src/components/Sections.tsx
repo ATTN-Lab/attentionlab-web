@@ -443,42 +443,6 @@ function LabsView({
         </div>
       </section>
 
-      {/* Founder */}
-      <section className="py-20 border-b border-gray-100">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="text-xs uppercase tracking-[0.2em] text-gray-700 font-semibold mb-10">
-            Founder
-          </div>
-
-          <div className="max-w-3xl">
-            <div className="group relative rounded-2xl p-[2px] bg-gradient-to-r from-[#9d5cff]/40 to-[#5ce5e5]/40 hover:from-[#9d5cff] hover:to-[#5ce5e5] active:from-[#9d5cff] active:to-[#5ce5e5] transition-all duration-300">
-              <div className="h-full p-8 rounded-[14px] bg-white flex flex-col sm:flex-row gap-8 items-start">
-                <img
-                  src="/temi.png"
-                  alt="Temitope Sobodu"
-                  className="w-32 h-32 rounded-full object-cover shrink-0"
-                />
-                <div>
-                  <div className="text-xs uppercase tracking-[0.2em] text-gray-500 font-semibold mb-2">
-                    Founder &amp; CEO
-                  </div>
-                  <h3 className="text-2xl font-bold mb-4">
-                    Temitope Sobodu, PhD
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    Temi is a pharmacologist focused on optimizing AI models
-                    for early drug discovery, and sets the strategic direction
-                    and roadmap for Attention Labs. He holds a PhD in
-                    pharmacology and brings prior business development
-                    experience from Pfizer and Sanofi, combining scientific
-                    depth with strategic leadership.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
     </>
   );
 }

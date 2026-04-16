@@ -40,12 +40,20 @@ export default function Nav({ view, onChange, visible }: NavProps) {
             </button>
           ))}
         </div>
-        <a
-          href="mailto:temi@attentionlab.ai"
-          className="text-xs sm:text-sm text-gray-600 hover:text-black shrink-0"
-        >
-          Contact
-        </a>
+        <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+          <a
+            href="/team"
+            className="text-xs sm:text-sm text-gray-600 hover:text-black"
+          >
+            Team
+          </a>
+          <a
+            href="mailto:temi@attentionlab.ai"
+            className="text-xs sm:text-sm text-gray-600 hover:text-black"
+          >
+            Contact
+          </a>
+        </div>
       </div>
     </nav>
   );
