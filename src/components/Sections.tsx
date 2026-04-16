@@ -266,7 +266,7 @@ function LabsView({
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             {/* Attention Bio */}
-            <div className="group relative rounded-2xl p-[2px] bg-gradient-to-r from-[#9d5cff]/25 to-[#5ce5e5]/25 hover:from-[#9d5cff] hover:to-[#5ce5e5] active:from-[#9d5cff] active:to-[#5ce5e5] transition-all duration-300">
+            <div className="group relative rounded-2xl p-[2px] bg-gradient-to-r from-[#9d5cff]/40 to-[#5ce5e5]/40 hover:from-[#9d5cff] hover:to-[#5ce5e5] active:from-[#9d5cff] active:to-[#5ce5e5] transition-all duration-300">
               <div className="h-full p-8 rounded-[14px] bg-white">
                 <div className="text-xs uppercase tracking-[0.2em] text-gray-700 font-semibold mb-2">
                   Attention Bio
@@ -288,7 +288,7 @@ function LabsView({
             </div>
 
             {/* Attention AI */}
-            <div className="group relative rounded-2xl p-[2px] bg-gradient-to-r from-[#9d5cff]/25 to-[#5ce5e5]/25 hover:from-[#9d5cff] hover:to-[#5ce5e5] active:from-[#9d5cff] active:to-[#5ce5e5] transition-all duration-300">
+            <div className="group relative rounded-2xl p-[2px] bg-gradient-to-r from-[#9d5cff]/40 to-[#5ce5e5]/40 hover:from-[#9d5cff] hover:to-[#5ce5e5] active:from-[#9d5cff] active:to-[#5ce5e5] transition-all duration-300">
               <div className="h-full p-8 rounded-[14px] bg-white">
                 <div className="text-xs uppercase tracking-[0.2em] text-gray-700 font-semibold mb-2">
                   Attention AI
@@ -426,7 +426,7 @@ function LabsView({
                 href={p.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative rounded-2xl p-[2px] bg-gradient-to-r from-[#9d5cff]/25 to-[#5ce5e5]/25 hover:from-[#9d5cff] hover:to-[#5ce5e5] active:from-[#9d5cff] active:to-[#5ce5e5] transition-all duration-300 block"
+                className="group relative rounded-2xl p-[2px] bg-gradient-to-r from-[#9d5cff]/40 to-[#5ce5e5]/40 hover:from-[#9d5cff] hover:to-[#5ce5e5] active:from-[#9d5cff] active:to-[#5ce5e5] transition-all duration-300 block"
               >
                 <div className="h-full p-6 rounded-[14px] bg-white flex flex-col">
                   <div className="text-xs uppercase tracking-[0.2em] text-gray-500 font-semibold mb-3">
@@ -451,7 +451,7 @@ function LabsView({
           </div>
 
           <div className="max-w-3xl">
-            <div className="group relative rounded-2xl p-[2px] bg-gradient-to-r from-[#9d5cff]/25 to-[#5ce5e5]/25 hover:from-[#9d5cff] hover:to-[#5ce5e5] active:from-[#9d5cff] active:to-[#5ce5e5] transition-all duration-300">
+            <div className="group relative rounded-2xl p-[2px] bg-gradient-to-r from-[#9d5cff]/40 to-[#5ce5e5]/40 hover:from-[#9d5cff] hover:to-[#5ce5e5] active:from-[#9d5cff] active:to-[#5ce5e5] transition-all duration-300">
               <div className="h-full p-8 rounded-[14px] bg-white flex flex-col sm:flex-row gap-8 items-start">
                 <img
                   src="/temi.png"
@@ -835,7 +835,7 @@ function AIView() {
             ].map((a) => (
               <div
                 key={a.name}
-                className="group relative rounded-2xl p-[2px] bg-gradient-to-r from-[#9d5cff]/25 to-[#5ce5e5]/25 hover:from-[#9d5cff] hover:to-[#5ce5e5] active:from-[#9d5cff] active:to-[#5ce5e5] transition-all duration-300"
+                className="group relative rounded-2xl p-[2px] bg-gradient-to-r from-[#9d5cff]/40 to-[#5ce5e5]/40 hover:from-[#9d5cff] hover:to-[#5ce5e5] active:from-[#9d5cff] active:to-[#5ce5e5] transition-all duration-300"
               >
                 <div className="h-full p-6 rounded-[14px] bg-white">
                   <div className="text-xs font-mono text-gray-400 mb-3">
