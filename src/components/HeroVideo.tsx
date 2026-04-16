@@ -98,6 +98,36 @@ export default function HeroVideo() {
           Making Humans Intelligent with AI
         </p>
       </div>
+
+      {/* Scroll-down arrow */}
+      <div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/70"
+        style={{
+          opacity: 1 - progress * 4,
+          pointerEvents: progress > 0.1 ? "none" : "auto",
+          animation: "teemingArrow 1.8s ease-in-out infinite",
+        }}
+      >
+        <svg
+          width="28"
+          height="28"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </div>
+
+      <style>{`
+        @keyframes teemingArrow {
+          0%, 100% { transform: translateY(0); opacity: 0.7; }
+          50% { transform: translateY(8px); opacity: 1; }
+        }
+      `}</style>
     </div>
   );
 }
