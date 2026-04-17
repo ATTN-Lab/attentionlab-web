@@ -483,7 +483,7 @@ const TEAM_MEMBERS = [
     bio: "Abhishek is a neuroscientist and molecular biologist with extensive expertise in in vitro modeling and preclinical validation. He is a postdoctoral researcher at Harvard-MGH, specializing in cellular transcriptomic pathways.",
   },
   {
-    name: "Jack Rudrum, PhD",
+    name: "Jack Rudrum",
     role: "Founding Team · Bioengineering",
     src: "/team/jack.png",
     bio: "Jack is a bioengineer specializing in developing in vitro blood-brain barrier models. He is a PhD candidate in the Bioengineering Department at MIT.",
