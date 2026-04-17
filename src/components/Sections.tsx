@@ -462,7 +462,7 @@ const TEAM_MEMBERS = [
     name: "Temitope Sobodu, PhD",
     role: "Founder & CEO",
     src: "/team/temi.png",
-    bio: "Temi is a pharmacologist focused on optimizing AI models for early drug discovery, and sets the strategic direction and roadmap for Attention Labs. He holds a PhD in pharmacology and brings prior business development experience from Pfizer and Sanofi, combining scientific depth with strategic leadership.",
+    bio: "Temi is a pharmacologist focused on optimizing AI models for early drug discovery, and sets the strategic direction and roadmap for Attention Labs. He holds a PhD in pharmacology and was a research fellow at Harvard Medical School. He brings prior business development experience from Pfizer and Sanofi, combining scientific depth with strategic leadership.",
   },
   {
     name: "Noah Abasciano",
