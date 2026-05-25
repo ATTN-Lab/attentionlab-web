@@ -1,0 +1,35 @@
+{
+  "total_compounds": 1023158502,
+  "by_provenance": {
+    "enamine_real": 181715968,
+    "existing": 779326410,
+    "pubchem": 62116124
+  },
+  "p_bbb": {
+    "mean": 0.6157,
+    "median": 0.6891,
+    "std": 0.3143,
+    "hits_05": 717681556,
+    "hits_07": 540573323,
+    "hits_09": 193275355
+  },
+  "cns_mpo": {
+    "mean": 3.97,
+    "median": 4.12,
+    "passed_filter": 866621930
+  },
+  "properties": {
+    "mw_mean": 268.5,
+    "logp_mean": 1.76,
+    "tpsa_mean": 56.6,
+    "hbd_mean": 1.25,
+    "hba_mean": 3.31
+  },
+  "scaffolds": {
+    "unique_murcko": 58600604,
+    "unique_generic": 4489830
+  },
+  "clusters": {
+    "n_clusters": 1000
+  }
+}

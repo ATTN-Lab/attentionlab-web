@@ -1,0 +1,56 @@
+{
+  "n_points": 459844,
+  "color_scales": {
+    "bbb_score": {
+      "min": 0.12249997720122338,
+      "max": 0.9881775891780853
+    },
+    "cns_mpo": {
+      "min": 2.4579999446868896,
+      "max": 6.0
+    },
+    "pka": {
+      "min": 0.6402711391448975,
+      "max": 18.930580234527586
+    },
+    "mol_weight": {
+      "min": 210.2502554321289,
+      "max": 418.371380004883
+    },
+    "logp": {
+      "min": -1.2317663645744323,
+      "max": 4.845374622344972
+    },
+    "tpsa": {
+      "min": 12.029999732971191,
+      "max": 118.88999938964844
+    },
+    "provenance_map": {
+      "0": "enamine_real",
+      "1": "existing"
+    }
+  },
+  "total_screened": 1023158502,
+  "columns": [
+    "compound_id",
+    "smiles_standardized",
+    "p_bbb",
+    "cns_mpo_score",
+    "mw",
+    "logp",
+    "tpsa",
+    "provenance",
+    "pka_representative",
+    "murcko_scaffold",
+    "cluster_id",
+    "umap_x",
+    "umap_y",
+    "umap3d_x",
+    "umap3d_y",
+    "umap3d_z"
+  ],
+  "provenance_counts": {
+    "existing": 360518,
+    "enamine_real": 99326
+  }
+}
