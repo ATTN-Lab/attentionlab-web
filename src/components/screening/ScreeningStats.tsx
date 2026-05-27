@@ -61,24 +61,29 @@ interface ScreeningStatsProps {
 export default function ScreeningStats({ summary }: ScreeningStatsProps) {
   if (!summary) return null;
 
-  const fmt = (n: number) => n.toLocaleString();
+  const compact = (n: number) => {
+    if (n >= 1e9) return `${(n / 1e9).toFixed(2)} B`;
+    if (n >= 1e6) return `${(n / 1e6).toFixed(1)} M`;
+    if (n >= 1e3) return `${(n / 1e3).toFixed(1)} K`;
+    return n.toLocaleString();
+  };
   const pct = (n: number, total: number) =>
     `${((n / total) * 100).toFixed(1)}%`;
 
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-6">
       <StatCard
-        value={fmt(summary.total_compounds)}
+        value={compact(summary.total_compounds)}
         label="Compounds screened"
         gradient
       />
       <StatCard
-        value={fmt(summary.p_bbb.hits_098)}
+        value={compact(summary.p_bbb.hits_098)}
         label="BBB+ hits"
         sub={pct(summary.p_bbb.hits_098, summary.total_compounds)}
       />
       <StatCard
-        value={summary.scaffolds.unique_murcko?.toLocaleString() ?? "--"}
+        value={summary.scaffolds.unique_murcko != null ? compact(summary.scaffolds.unique_murcko) : "--"}
         label="Unique scaffolds"
       />
       <StatCard
@@ -101,7 +106,7 @@ export default function ScreeningStats({ summary }: ScreeningStatsProps) {
         value={Object.keys(summary.by_provenance).length.toString()}
         label="Data sources"
         sub={Object.entries(summary.by_provenance)
-          .map(([k, v]) => `${k.replace("_", " ")}: ${fmt(v)}`)
+          .map(([k, v]) => `${k.replace("_", " ")}: ${compact(v)}`)
           .join(" · ")}
       />
     </div>
