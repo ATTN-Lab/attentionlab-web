@@ -70,7 +70,7 @@ interface EdaSummary {
   by_provenance: Record<string, number>;
 }
 
-export default function ScreeningContent() {
+export default function ScreeningContent({ showHero = true }: { showHero?: boolean }) {
   const [summary, setSummary] = useState<EdaSummary | null>(null);
 
   useEffect(() => {
@@ -349,11 +349,13 @@ export default function ScreeningContent() {
       </div>
 
       {/* Animated graphical abstract */}
-      <LazyMount>
-        <div className="relative w-full">
-          <BBBNukeHero src="/bbb-nuke-hero.html" />
-        </div>
-      </LazyMount>
+      {showHero && (
+        <LazyMount>
+          <div className="relative w-full">
+            <BBBNukeHero src="/bbb-nuke-hero.html" />
+          </div>
+        </LazyMount>
+      )}
     </>
   );
 }

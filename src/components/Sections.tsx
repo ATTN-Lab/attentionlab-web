@@ -1014,7 +1014,7 @@ function AIView() {
       </section>
 
       {/* 1B Compound Screen — full screening page content */}
-      <ScreeningContent />
+      <ScreeningContent showHero={false} />
     </>
   );
 }
