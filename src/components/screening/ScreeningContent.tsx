@@ -55,6 +55,7 @@ interface EdaSummary {
   };
   properties: {
     mw_mean: number;
+    mw_median: number;
     logp_mean: number;
     tpsa_mean: number;
     hbd_mean: number;

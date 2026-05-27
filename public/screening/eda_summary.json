@@ -21,6 +21,7 @@
   },
   "properties": {
     "mw_mean": 268.5,
+    "mw_median": 260.0,
     "logp_mean": 1.76,
     "tpsa_mean": 56.6,
     "hbd_mean": 1.25,

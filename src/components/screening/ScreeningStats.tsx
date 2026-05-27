@@ -38,10 +38,12 @@ interface ScreeningStatsProps {
     };
     cns_mpo: {
       mean: number;
+      median: number;
       passed_filter: number | null;
     };
     properties: {
       mw_mean: number;
+      mw_median: number;
       logp_mean: number;
       tpsa_mean: number;
     };
@@ -84,16 +86,16 @@ export default function ScreeningStats({ summary }: ScreeningStatsProps) {
         label="Chemical clusters"
       />
       <StatCard
-        value={summary.p_bbb.mean.toFixed(3)}
-        label="Mean P(BBB)"
+        value={summary.p_bbb.median.toFixed(3)}
+        label="Median P(BBB)"
       />
       <StatCard
-        value={summary.cns_mpo.mean.toFixed(2)}
-        label="Mean CNS-MPO"
+        value={summary.cns_mpo.median.toFixed(2)}
+        label="Median CNS-MPO"
       />
       <StatCard
-        value={`${summary.properties.mw_mean.toFixed(0)} Da`}
-        label="Mean MW"
+        value={`${summary.properties.mw_median.toFixed(0)} Da`}
+        label="Median MW"
       />
       <StatCard
         value={Object.keys(summary.by_provenance).length.toString()}
