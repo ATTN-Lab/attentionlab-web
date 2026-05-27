@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import ScreeningStats from "@/components/screening/ScreeningStats";
 
@@ -13,6 +13,29 @@ const BBBNukeHero = dynamic(
   () => import("@/components/BBBNukeHero"),
   { ssr: false }
 );
+
+function LazyMount({ children, rootMargin = "400px" }: { children: React.ReactNode; rootMargin?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          obs.disconnect();
+        }
+      },
+      { rootMargin }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [rootMargin]);
+
+  return <div ref={ref}>{visible ? children : null}</div>;
+}
 
 interface EdaSummary {
   total_compounds: number;
@@ -98,9 +121,11 @@ export default function ScreeningContent() {
       </div>
 
       {/* 3D Viewer — full-bleed, dark */}
-      <div className="w-full h-[70vh] md:h-[80vh] relative">
-        <PointCloudViewer basePath="/screening" />
-      </div>
+      <LazyMount>
+        <div className="w-full h-[70vh] md:h-[80vh] relative">
+          <PointCloudViewer basePath="/screening" />
+        </div>
+      </LazyMount>
 
       {/* The Screen */}
       <div className="bg-[#0a0a0f] text-white">
@@ -324,9 +349,11 @@ export default function ScreeningContent() {
       </div>
 
       {/* Animated graphical abstract */}
-      <div className="relative w-full">
-        <BBBNukeHero src="/bbb-nuke-hero.html" />
-      </div>
+      <LazyMount>
+        <div className="relative w-full">
+          <BBBNukeHero src="/bbb-nuke-hero.html" />
+        </div>
+      </LazyMount>
     </>
   );
 }
