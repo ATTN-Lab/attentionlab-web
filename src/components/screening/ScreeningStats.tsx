@@ -34,6 +34,7 @@ interface ScreeningStatsProps {
       hits_05: number;
       hits_07: number;
       hits_09: number;
+      hits_098: number;
     };
     cns_mpo: {
       mean: number;
@@ -70,9 +71,9 @@ export default function ScreeningStats({ summary }: ScreeningStatsProps) {
         gradient
       />
       <StatCard
-        value={fmt(summary.p_bbb.hits_07)}
-        label="BBB+ hits (P > 0.7)"
-        sub={pct(summary.p_bbb.hits_07, summary.total_compounds)}
+        value={fmt(summary.p_bbb.hits_098)}
+        label="BBB+ hits"
+        sub={pct(summary.p_bbb.hits_098, summary.total_compounds)}
       />
       <StatCard
         value={summary.scaffolds.unique_murcko?.toLocaleString() ?? "--"}

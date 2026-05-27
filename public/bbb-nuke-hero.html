@@ -1,0 +1,1231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>BBB-Nuke — Graphical Abstract</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0A0A0F;
+    --cyan: #5CE5E5;
+    --violet: #9D5CFF;
+    --pink: #F472B6;
+    --gray: #94A3B8;
+    --gray-dim: #475569;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #050507;
+    color: var(--gray);
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+  }
+  /* Stage scales 4096x2160 to fit viewport */
+  /* Embed mode: fills its parent container */
+  html, body { background: #0A0A0F; }
+  #viewport {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 56.25vw; /* 16:9 fallback */
+    background: #0A0A0F;
+    overflow: hidden;
+  }
+  #stage {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 4096px;
+    height: 2160px;
+    background: var(--bg);
+    transform-origin: 0 0;
+    transform: translate(-50%, -50%) scale(0.25);
+    overflow: hidden;
+  }
+  /* Subtle vignette + grain */
+  #stage::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(0,0,0,0.55) 100%),
+      radial-gradient(ellipse at 50% 0%, rgba(157,92,255,0.06), transparent 60%);
+    pointer-events: none;
+    z-index: 50;
+  }
+  canvas.layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  /* corner labels */
+  .corner {
+    position: absolute;
+    z-index: 60;
+    color: var(--gray);
+  }
+  .top-left {
+    top: 80px;
+    left: 120px;
+  }
+  .top-left .brand {
+    font-family: "Inter Tight", sans-serif;
+    font-weight: 800;
+    font-size: 72px;
+    letter-spacing: -0.02em;
+    color: #E2E8F0;
+    line-height: 1;
+    margin: 0;
+  }
+  .top-left .brand span { color: var(--cyan); }
+  .top-left .sub {
+    margin-top: 14px;
+    font-size: 22px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gray);
+    font-weight: 400;
+  }
+  .top-right {
+    top: 80px;
+    right: 120px;
+    text-align: right;
+    font-size: 22px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .top-right .lab { color: #CBD5E1; font-weight: 500; }
+  .top-right .meta {
+    margin-top: 10px;
+    color: var(--gray-dim);
+    font-size: 16px;
+    letter-spacing: 0.12em;
+  }
+  /* input counter */
+  .counter {
+    position: absolute;
+    z-index: 60;
+    left: 120px;
+    bottom: 240px;
+    font-size: 18px;
+    letter-spacing: 0.1em;
+    color: var(--gray);
+  }
+  .counter .n {
+    display: block;
+    font-size: 56px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: #E2E8F0;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .counter .n .unit { color: var(--violet); font-weight: 400; font-size: 28px; margin-left: 8px; vertical-align: 0.3em; }
+  .counter .label { color: var(--gray-dim); font-size: 14px; }
+
+  /* Output exemplar callout */
+  .exemplar {
+    position: absolute;
+    z-index: 60;
+    color: var(--cyan);
+    font-size: 18px;
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 12px rgba(92,229,229,0.6);
+  }
+  .exemplar .score {
+    display: block;
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--cyan);
+  }
+  .exemplar .small {
+    color: var(--gray);
+    font-size: 13px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-top: 4px;
+    text-shadow: none;
+  }
+
+  /* Gate labels */
+  .gate-label {
+    position: absolute;
+    z-index: 55;
+    text-align: center;
+    color: var(--gray);
+    font-size: 15px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+  .gate-label .num {
+    display: block;
+    color: var(--violet);
+    font-size: 12px;
+    margin-bottom: 6px;
+    letter-spacing: 0.3em;
+  }
+  .gate-label .name {
+    color: #CBD5E1;
+    font-weight: 500;
+  }
+  .gate-label .stat {
+    display: block;
+    margin-top: 8px;
+    color: var(--cyan);
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Zone labels at top */
+  .zone-label {
+    position: absolute;
+    z-index: 55;
+    color: var(--gray-dim);
+    font-size: 13px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    transform: translateX(-50%);
+  }
+
+  /* Bottom pipeline strip */
+  .pipeline-strip {
+    position: absolute;
+    z-index: 60;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    font-size: 16px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+  .pipeline-strip .step {
+    border: 1px solid rgba(148,163,184,0.25);
+    padding: 10px 18px;
+    border-radius: 2px;
+    background: rgba(10,10,15,0.6);
+    backdrop-filter: blur(2px);
+  }
+  .pipeline-strip .step.accent {
+    border-color: rgba(92,229,229,0.5);
+    color: var(--cyan);
+    box-shadow: inset 0 0 20px rgba(92,229,229,0.08);
+  }
+  .pipeline-strip .arrow {
+    color: var(--gray-dim);
+    font-family: monospace;
+  }
+
+  /* Coordinate ticks */
+  .coord {
+    position: absolute;
+    z-index: 60;
+    color: var(--gray-dim);
+    font-size: 12px;
+    letter-spacing: 0.3em;
+  }
+
+  /* BBB membrane label */
+  .bbb-callout {
+    position: absolute;
+    z-index: 60;
+    color: var(--cyan);
+    font-size: 14px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    text-shadow: 0 0 14px rgba(92,229,229,0.5);
+  }
+
+  /* UMAP legend */
+  .umap-legend {
+    position: absolute;
+    z-index: 60;
+    right: 120px;
+    bottom: 230px;
+    color: var(--gray);
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-align: right;
+  }
+  .umap-legend .ttl { color: #CBD5E1; font-size: 16px; margin-bottom: 14px; }
+  .legend-bar {
+    width: 220px;
+    height: 6px;
+    margin-left: auto;
+    margin-top: 4px;
+    background: linear-gradient(90deg, #9D5CFF 0%, #5CE5E5 100%);
+    border-radius: 2px;
+  }
+  .legend-ticks {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    margin-top: 6px;
+    color: var(--gray-dim);
+    width: 220px;
+    margin-left: auto;
+    letter-spacing: 0.1em;
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    /* animations halted via JS; stage still renders one frame */
+  }
+</style>
+</head>
+<body>
+
+<div id="viewport">
+  <div id="stage">
+    <canvas class="layer" id="bg-layer"></canvas>
+    <canvas class="layer" id="mol-layer"></canvas>
+    <canvas class="layer" id="fg-layer"></canvas>
+
+    <!-- Corner: brand -->
+    <div class="corner top-left">
+      <p class="brand">BBB<span>-</span>Nuke</p>
+      <div class="sub">Blood–Brain Barrier Penetration Screening</div>
+    </div>
+
+    <!-- Corner: lab -->
+    <div class="corner top-right">
+      <div class="lab">Attention Labs</div>
+      <div class="meta">v2026.05 · graphical abstract</div>
+    </div>
+
+    <!-- Input counter -->
+    <div class="counter">
+      <span class="n">1,023,158,502 <span class="unit">cpds</span></span>
+      <span class="label">ENAMINE REAL · ZINC · PUBCHEM · CHEMBL</span>
+    </div>
+
+    <!-- BBB callout -->
+    <div class="bbb-callout" style="left: 950px; top: 1620px;">↑ Endothelial bilayer · tight junctions</div>
+
+    <!-- Zone labels (top) -->
+    <div class="zone-label" style="left: 410px; top: 380px;">01 · Input</div>
+    <div class="zone-label" style="left: 1010px; top: 380px;">02 · Barrier</div>
+    <div class="zone-label" style="left: 2080px; top: 380px;">03 · Pipeline</div>
+    <div class="zone-label" style="left: 3140px; top: 380px;">04 · Hits</div>
+    <div class="zone-label" style="left: 3700px; top: 380px;">05 · Chemical space</div>
+
+    <!-- Gate labels (positions match canvas gate x-coords) -->
+    <div class="gate-label" style="left: 1450px; top: 470px;">
+      <span class="num">G1</span>
+      <span class="name">Standardize</span>
+      <span class="stat">→ 8.7 × 10⁸</span>
+    </div>
+    <div class="gate-label" style="left: 1660px; top: 470px;">
+      <span class="num">G2</span>
+      <span class="name">Properties</span>
+      <span class="stat">→ 3.1 × 10⁸</span>
+    </div>
+    <div class="gate-label" style="left: 1870px; top: 470px;">
+      <span class="num">G3</span>
+      <span class="name">pKa · GNN</span>
+      <span class="stat">→ 1.4 × 10⁸</span>
+    </div>
+    <div class="gate-label" style="left: 2080px; top: 470px;">
+      <span class="num">G4</span>
+      <span class="name">CNS-MPO</span>
+      <span class="stat">→ 4.2 × 10⁷</span>
+    </div>
+    <div class="gate-label" style="left: 2290px; top: 470px;">
+      <span class="num">G5</span>
+      <span class="name">Efflux × 7</span>
+      <span class="stat">→ 6.8 × 10⁶</span>
+    </div>
+    <div class="gate-label" style="left: 2500px; top: 470px;">
+      <span class="num">G6</span>
+      <span class="name">Classifier</span>
+      <span class="stat">→ P(BBB)</span>
+    </div>
+    <div class="gate-label" style="left: 2710px; top: 470px;">
+      <span class="num">OUT</span>
+      <span class="name">Hits</span>
+      <span class="stat">2.4 × 10⁵</span>
+    </div>
+
+    <!-- Exemplar callouts in output zone -->
+    <div class="exemplar" style="left: 3060px; top: 1130px;">
+      <span class="score">P(BBB) = 0.98</span>
+      <span class="small">Cluster 14 · MW 312 · logP 2.4</span>
+    </div>
+    <div class="exemplar" style="left: 3260px; top: 1480px;">
+      <span class="score" style="font-size: 22px; color: #CBD5E1; text-shadow: 0 0 10px rgba(203,213,225,0.4);">P(BBB) = 0.91</span>
+      <span class="small">Cluster 03 · MW 287 · logP 1.9</span>
+    </div>
+
+    <!-- UMAP legend -->
+    <div class="umap-legend">
+      <div class="ttl">UMAP · chemical space</div>
+      <div>P(BBB) score</div>
+      <div class="legend-bar"></div>
+      <div class="legend-ticks"><span>0.0</span><span>0.5</span><span>1.0</span></div>
+    </div>
+
+    <!-- Bottom pipeline strip -->
+    <div class="pipeline-strip">
+      <span class="step">Standardize</span><span class="arrow">›</span>
+      <span class="step">Properties</span><span class="arrow">›</span>
+      <span class="step">pKa</span><span class="arrow">›</span>
+      <span class="step">CNS-MPO</span><span class="arrow">›</span>
+      <span class="step">Efflux</span><span class="arrow">›</span>
+      <span class="step">Classifier</span><span class="arrow">›</span>
+      <span class="step accent">P(BBB)</span>
+    </div>
+
+    <!-- Coord ticks bottom corners -->
+    <div class="coord" style="left: 120px; bottom: 40px;">0,0</div>
+    <div class="coord" style="right: 120px; bottom: 40px;">4096 × 2160</div>
+
+  </div>
+</div>
+
+<div id="controls-removed"></div>
+
+<script>
+/* ============================================================
+   SCALE-TO-FIT
+   ============================================================ */
+function fit() {
+  const stage = document.getElementById("stage");
+  const vp = document.getElementById("viewport");
+  const sw = vp.clientWidth, sh = vp.clientHeight;
+  const s = Math.min(sw / 4096, sh / 2160);
+  // translate by -50% of natural size (post-scale) to recenter
+  stage.style.transform = `translate(${-4096 * s / 2}px, ${-2160 * s / 2}px) scale(${s})`;
+}
+fit();
+window.addEventListener("resize", fit);
+
+/* ============================================================
+   CANVAS SETUP
+   ============================================================ */
+const W = 4096, H = 2160;
+function setupCanvas(id) {
+  const c = document.getElementById(id);
+  c.width = W; c.height = H;
+  return c.getContext("2d");
+}
+const bg = setupCanvas("bg-layer");
+const mol = setupCanvas("mol-layer");
+const fg = setupCanvas("fg-layer");
+
+const COLORS = {
+  cyan: "#5CE5E5",
+  violet: "#9D5CFF",
+  pink: "#F472B6",
+  gray: "#94A3B8",
+  dim: "#475569",
+  bg: "#0A0A0F",
+};
+
+/* ============================================================
+   ZONE GEOMETRY (x-pixels in 4096-wide stage)
+   ============================================================ */
+const ZONES = {
+  inputStart: 200,
+  inputEnd: 880,
+  bbbStart: 900,
+  bbbEnd: 1280,
+  pipeStart: 1380,
+  pipeEnd: 2780,
+  outStart: 2820,
+  outEnd: 3500,
+  umapStart: 3520,
+  umapEnd: 3980,
+};
+const GATES = [1450, 1660, 1870, 2080, 2290, 2500, 2710];
+
+/* ============================================================
+   BACKGROUND ATMOSPHERE
+   ============================================================ */
+function drawBackground() {
+  const ctx = bg;
+  ctx.clearRect(0, 0, W, H);
+
+  // base
+  ctx.fillStyle = COLORS.bg;
+  ctx.fillRect(0, 0, W, H);
+
+  // wide horizontal gradient violet → cyan across pipeline
+  const grad = ctx.createLinearGradient(ZONES.pipeStart, 0, ZONES.outEnd, 0);
+  grad.addColorStop(0, "rgba(157,92,255,0.10)");
+  grad.addColorStop(0.5, "rgba(157,92,255,0.05)");
+  grad.addColorStop(1, "rgba(92,229,229,0.12)");
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+
+  // soft glow around BBB membrane
+  const bbbGrad = ctx.createRadialGradient(1090, H/2, 30, 1090, H/2, 800);
+  bbbGrad.addColorStop(0, "rgba(92,229,229,0.22)");
+  bbbGrad.addColorStop(1, "rgba(92,229,229,0)");
+  ctx.fillStyle = bbbGrad;
+  ctx.fillRect(0, 0, W, H);
+
+  // soft glow at final gate
+  const finalGrad = ctx.createRadialGradient(2710, H/2, 30, 2710, H/2, 700);
+  finalGrad.addColorStop(0, "rgba(92,229,229,0.18)");
+  finalGrad.addColorStop(1, "rgba(92,229,229,0)");
+  ctx.fillStyle = finalGrad;
+  ctx.fillRect(0, 0, W, H);
+
+  // umap glow
+  const umGrad = ctx.createRadialGradient(3750, H/2 + 50, 50, 3750, H/2 + 50, 800);
+  umGrad.addColorStop(0, "rgba(157,92,255,0.18)");
+  umGrad.addColorStop(0.6, "rgba(92,229,229,0.08)");
+  umGrad.addColorStop(1, "rgba(92,229,229,0)");
+  ctx.fillStyle = umGrad;
+  ctx.fillRect(0, 0, W, H);
+
+  // faint horizontal grid (very subtle)
+  ctx.strokeStyle = "rgba(148,163,184,0.04)";
+  ctx.lineWidth = 1;
+  for (let y = 0; y < H; y += 80) {
+    ctx.beginPath();
+    ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+
+  // top/bottom edge lines (faint)
+  ctx.strokeStyle = "rgba(148,163,184,0.12)";
+  ctx.beginPath();
+  ctx.moveTo(120, 540); ctx.lineTo(W - 120, 540); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(120, H - 220); ctx.lineTo(W - 120, H - 220); ctx.stroke();
+
+  drawBBBMembrane();
+  drawGates();
+  drawEffluxTransporters();
+  drawConnectingLines();
+}
+
+/* ============================================================
+   BBB MEMBRANE — vertical bilayer cross-section
+   ============================================================ */
+function drawBBBMembrane() {
+  const ctx = bg;
+  const cx = 1090;
+  const topY = 540, botY = H - 220;
+
+  // Two parallel lines for bilayer
+  const leafletGap = 24;
+
+  ctx.save();
+  ctx.shadowColor = "rgba(92,229,229,0.6)";
+  ctx.shadowBlur = 30;
+
+  // outer leaflet (left)
+  ctx.strokeStyle = "rgba(92,229,229,0.7)";
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.moveTo(cx - leafletGap, topY);
+  ctx.lineTo(cx - leafletGap, botY);
+  ctx.stroke();
+
+  // inner leaflet (right)
+  ctx.beginPath();
+  ctx.moveTo(cx + leafletGap, topY);
+  ctx.lineTo(cx + leafletGap, botY);
+  ctx.stroke();
+  ctx.restore();
+
+  // phospholipid heads + tails — small circles + lines
+  const headR = 8;
+  for (let y = topY + 20; y < botY; y += 22) {
+    // left leaflet (heads face left)
+    ctx.fillStyle = "rgba(92,229,229,0.85)";
+    ctx.beginPath();
+    ctx.arc(cx - leafletGap - 10, y, headR, 0, Math.PI * 2);
+    ctx.fill();
+    // tail
+    ctx.strokeStyle = "rgba(92,229,229,0.35)";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(cx - leafletGap - 4, y);
+    ctx.lineTo(cx - 2, y - 4);
+    ctx.moveTo(cx - leafletGap - 4, y);
+    ctx.lineTo(cx - 2, y + 4);
+    ctx.stroke();
+
+    // right leaflet (heads face right)
+    ctx.fillStyle = "rgba(92,229,229,0.85)";
+    ctx.beginPath();
+    ctx.arc(cx + leafletGap + 10, y, headR, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(92,229,229,0.35)";
+    ctx.beginPath();
+    ctx.moveTo(cx + leafletGap + 4, y);
+    ctx.lineTo(cx + 2, y - 4);
+    ctx.moveTo(cx + leafletGap + 4, y);
+    ctx.lineTo(cx + 2, y + 4);
+    ctx.stroke();
+  }
+
+  // tight junction proteins — small clusters between leaflets
+  for (let i = 0; i < 6; i++) {
+    const y = topY + 100 + i * (botY - topY - 200) / 5;
+    ctx.fillStyle = "rgba(244,114,182,0.7)";
+    ctx.shadowColor = "rgba(244,114,182,0.7)";
+    ctx.shadowBlur = 20;
+    ctx.beginPath();
+    ctx.arc(cx, y, 14, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    // small "junction" perpendicular ticks
+    ctx.strokeStyle = "rgba(244,114,182,0.5)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(cx - 30, y); ctx.lineTo(cx + 30, y);
+    ctx.stroke();
+  }
+}
+
+/* ============================================================
+   GATES — translucent vertical scanning planes
+   ============================================================ */
+function drawGates() {
+  const ctx = bg;
+  const topY = 560, botY = H - 240;
+
+  GATES.forEach((x, i) => {
+    const isFinal = i === 5;
+    const isOut = i === 6;
+    if (isOut) return; // last "OUT" label has no gate
+
+    // glow column
+    const g = ctx.createLinearGradient(x - 40, 0, x + 40, 0);
+    if (isFinal) {
+      g.addColorStop(0, "rgba(157,92,255,0)");
+      g.addColorStop(0.5, "rgba(92,229,229,0.22)");
+      g.addColorStop(1, "rgba(92,229,229,0)");
+    } else {
+      g.addColorStop(0, "rgba(157,92,255,0)");
+      g.addColorStop(0.5, "rgba(157,92,255,0.14)");
+      g.addColorStop(1, "rgba(157,92,255,0)");
+    }
+    ctx.fillStyle = g;
+    ctx.fillRect(x - 40, topY, 80, botY - topY);
+
+    // crisp center line
+    ctx.save();
+    ctx.shadowBlur = isFinal ? 24 : 12;
+    ctx.shadowColor = isFinal ? "rgba(92,229,229,0.9)" : "rgba(157,92,255,0.7)";
+    ctx.strokeStyle = isFinal ? "rgba(92,229,229,0.95)" : "rgba(157,92,255,0.7)";
+    ctx.lineWidth = isFinal ? 2.5 : 1.5;
+    ctx.beginPath();
+    ctx.moveTo(x, topY); ctx.lineTo(x, botY);
+    ctx.stroke();
+    ctx.restore();
+
+    // tick marks
+    ctx.strokeStyle = isFinal ? "rgba(92,229,229,0.6)" : "rgba(157,92,255,0.45)";
+    ctx.lineWidth = 1;
+    for (let ty = topY + 30; ty < botY; ty += 80) {
+      ctx.beginPath();
+      ctx.moveTo(x - 10, ty); ctx.lineTo(x + 10, ty);
+      ctx.stroke();
+    }
+
+    // For G3 (pKa) draw subtle constellation
+    if (i === 2) {
+      drawConstellationOverlay(x, H/2, 130);
+    }
+    // For G4 (CNS-MPO) overlay scoring grid
+    if (i === 3) {
+      drawScoringGrid(x);
+    }
+  });
+}
+
+function drawConstellationOverlay(cx, cy, r) {
+  const ctx = bg;
+  const pts = [];
+  for (let i = 0; i < 14; i++) {
+    const a = (i / 14) * Math.PI * 2 + Math.random() * 0.4;
+    const rr = r * (0.4 + Math.random() * 0.6);
+    pts.push([cx + Math.cos(a) * rr, cy + Math.sin(a) * rr * 0.7]);
+  }
+  ctx.strokeStyle = "rgba(157,92,255,0.25)";
+  ctx.lineWidth = 0.8;
+  for (let i = 0; i < pts.length; i++) {
+    for (let j = i + 1; j < pts.length; j++) {
+      const d = Math.hypot(pts[i][0]-pts[j][0], pts[i][1]-pts[j][1]);
+      if (d < 90) {
+        ctx.beginPath();
+        ctx.moveTo(pts[i][0], pts[i][1]);
+        ctx.lineTo(pts[j][0], pts[j][1]);
+        ctx.stroke();
+      }
+    }
+  }
+  ctx.fillStyle = "rgba(157,92,255,0.9)";
+  pts.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p[0], p[1], 2.5, 0, Math.PI*2);
+    ctx.fill();
+  });
+}
+
+function drawScoringGrid(cx) {
+  const ctx = bg;
+  const cols = 5, rows = 6;
+  const cellW = 18, cellH = 18;
+  const gx = cx + 60, gy = H/2 - 100;
+  ctx.strokeStyle = "rgba(92,229,229,0.25)";
+  ctx.lineWidth = 0.8;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      ctx.strokeRect(gx + c * cellW, gy + r * cellH, cellW, cellH);
+      if (Math.random() < 0.35) {
+        ctx.fillStyle = `rgba(92,229,229,${0.15 + Math.random() * 0.4})`;
+        ctx.fillRect(gx + c * cellW + 1, gy + r * cellH + 1, cellW - 2, cellH - 2);
+      }
+    }
+  }
+}
+
+/* ============================================================
+   EFFLUX TRANSPORTERS — 7 pump silhouettes at G5
+   ============================================================ */
+function drawEffluxTransporters() {
+  const ctx = bg;
+  const x = GATES[4]; // G5
+  const topY = 600, botY = H - 280;
+  const count = 7;
+  const step = (botY - topY) / (count + 1);
+  for (let i = 1; i <= count; i++) {
+    const y = topY + step * i;
+    ctx.save();
+    ctx.translate(x, y);
+    // pump silhouette — barrel with internal channel, pink-tinged
+    ctx.fillStyle = "rgba(244,114,182,0.18)";
+    ctx.strokeStyle = "rgba(244,114,182,0.75)";
+    ctx.lineWidth = 1.8;
+    ctx.shadowColor = "rgba(244,114,182,0.5)";
+    ctx.shadowBlur = 10;
+    // outer barrel
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 26, 18, 0, 0, Math.PI*2);
+    ctx.fill(); ctx.stroke();
+    ctx.shadowBlur = 0;
+    // inner channel
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 8, 14, 0, 0, Math.PI*2);
+    ctx.strokeStyle = "rgba(244,114,182,0.45)";
+    ctx.stroke();
+    // small "pump" arrows
+    ctx.strokeStyle = "rgba(244,114,182,0.7)";
+    ctx.beginPath();
+    ctx.moveTo(-30, 0); ctx.lineTo(-42, -4);
+    ctx.moveTo(-30, 0); ctx.lineTo(-42, 4);
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
+/* ============================================================
+   CONNECTING LINES between zones
+   ============================================================ */
+function drawConnectingLines() {
+  const ctx = bg;
+  // Subtle horizontal channel suggesting the pipeline axis
+  ctx.strokeStyle = "rgba(148,163,184,0.08)";
+  ctx.setLineDash([6, 8]);
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(ZONES.inputEnd, H/2);
+  ctx.lineTo(ZONES.umapStart, H/2);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+/* ============================================================
+   MOLECULES — procedurally generated, sourced
+   ============================================================ */
+function makeMolecule(seed) {
+  // Build a small molecule as graph of atoms + bonds
+  const numAtoms = 3 + Math.floor(seed * 9); // 3..11
+  const atoms = [];
+  const bonds = [];
+  // Start with a small ring sometimes
+  const hasRing = seed > 0.45;
+  if (hasRing) {
+    const ringSize = 5 + Math.floor(seed * 2); // 5 or 6
+    const cx = 0, cy = 0, r = 14;
+    for (let i = 0; i < ringSize; i++) {
+      const a = (i / ringSize) * Math.PI * 2;
+      atoms.push({ x: Math.cos(a) * r + cx, y: Math.sin(a) * r + cy, kind: Math.random() < 0.15 ? "N" : "C" });
+    }
+    for (let i = 0; i < ringSize; i++) {
+      bonds.push([i, (i+1) % ringSize, (Math.random() < 0.3 ? 2 : 1)]);
+    }
+  }
+  // Add chain/branches
+  let attachIdx = atoms.length ? Math.floor(Math.random() * atoms.length) : 0;
+  if (atoms.length === 0) {
+    atoms.push({ x: 0, y: 0, kind: "C" });
+  }
+  for (let i = atoms.length; i < numAtoms; i++) {
+    const base = atoms[attachIdx];
+    const angle = Math.random() * Math.PI * 2;
+    const len = 14;
+    const nx = base.x + Math.cos(angle) * len;
+    const ny = base.y + Math.sin(angle) * len;
+    const kindRoll = Math.random();
+    const kind = kindRoll < 0.7 ? "C" : kindRoll < 0.85 ? "O" : "N";
+    atoms.push({ x: nx, y: ny, kind });
+    bonds.push([attachIdx, i, Math.random() < 0.15 ? 2 : 1]);
+    attachIdx = Math.random() < 0.6 ? i : Math.floor(Math.random() * atoms.length);
+  }
+  return { atoms, bonds };
+}
+
+const ATOM_COLORS = {
+  C: "#CBD5E1",
+  N: "#5CE5E5",
+  O: "#F472B6",
+};
+
+function drawMolecule(ctx, m, x, y, scale, color, alpha) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(scale, scale);
+  ctx.globalAlpha = alpha;
+  // bonds
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 1.4 / scale + 0.5;
+  ctx.lineCap = "round";
+  m.bonds.forEach(([a, b, order]) => {
+    const A = m.atoms[a], B = m.atoms[b];
+    if (order === 2) {
+      // draw double bond
+      const dx = B.x - A.x, dy = B.y - A.y;
+      const len = Math.hypot(dx, dy) || 1;
+      const ox = -dy / len * 2, oy = dx / len * 2;
+      ctx.beginPath();
+      ctx.moveTo(A.x + ox, A.y + oy); ctx.lineTo(B.x + ox, B.y + oy);
+      ctx.moveTo(A.x - ox, A.y - oy); ctx.lineTo(B.x - ox, B.y - oy);
+      ctx.stroke();
+    } else {
+      ctx.beginPath();
+      ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y);
+      ctx.stroke();
+    }
+  });
+  // atoms
+  m.atoms.forEach(a => {
+    ctx.fillStyle = a.kind === "C" ? color : ATOM_COLORS[a.kind];
+    ctx.beginPath();
+    ctx.arc(a.x, a.y, 2.6, 0, Math.PI*2);
+    ctx.fill();
+  });
+  ctx.restore();
+}
+
+/* ============================================================
+   PARTICLE SYSTEM — input cloud + flowing stream
+   ============================================================ */
+const moleculeTemplates = Array.from({length: 32}, (_, i) => makeMolecule(i / 32 + Math.random() * 0.3));
+
+// Input cloud (Zone 1) — many static, dense molecules
+const inputCloud = [];
+const N_CLOUD = 900;
+const TOP = 540, BOT = H - 240;
+for (let i = 0; i < N_CLOUD; i++) {
+  const x = ZONES.inputStart + Math.random() * (ZONES.inputEnd - ZONES.inputStart);
+  const y = TOP + Math.random() * (BOT - TOP);
+  // proximity to BBB → smaller, dimmer
+  const dist = (ZONES.inputEnd - x) / (ZONES.inputEnd - ZONES.inputStart);
+  const srcRoll = Math.random();
+  const tint = srcRoll < 0.5 ? COLORS.violet : srcRoll < 0.85 ? COLORS.cyan : COLORS.pink;
+  inputCloud.push({
+    x, y,
+    tmpl: moleculeTemplates[Math.floor(Math.random() * moleculeTemplates.length)],
+    scale: 0.4 + Math.random() * 0.6 + dist * 0.3,
+    color: tint,
+    alpha: 0.15 + Math.random() * 0.45,
+    rot: Math.random() * Math.PI * 2,
+    spin: (Math.random() - 0.5) * 0.002,
+    bob: Math.random() * Math.PI * 2,
+  });
+}
+
+// Flowing stream — molecules traveling from BBB through pipeline to output
+const stream = [];
+const N_STREAM = 420;
+for (let i = 0; i < N_STREAM; i++) {
+  spawnStreamParticle(true);
+}
+function spawnStreamParticle(initial = false) {
+  const t = initial ? Math.random() : 0; // 0..1 along pipeline
+  const xStart = ZONES.bbbStart - 200 + Math.random() * 120;
+  const xEnd = ZONES.umapStart - 100;
+  const p = {
+    t,
+    speed: 0.00045 + Math.random() * 0.00055,
+    xStart, xEnd,
+    yJitter: (Math.random() - 0.5) * 700,
+    tmpl: moleculeTemplates[Math.floor(Math.random() * moleculeTemplates.length)],
+    scale: 0.45 + Math.random() * 0.5,
+    color: Math.random() < 0.5 ? COLORS.violet : COLORS.cyan,
+    rot: Math.random() * Math.PI * 2,
+    spin: (Math.random() - 0.5) * 0.004,
+    rejected: false,
+    rejTime: 0,
+    pBBB: Math.random(),
+    survivedTo: 6, // index of gate it survives past (random elimination)
+  };
+  // probability of survival decreases per gate
+  // Each gate independent — assign survivedTo by stochastic walk
+  let st = 6;
+  for (let g = 0; g < 6; g++) {
+    const survive = [0.85, 0.6, 0.55, 0.55, 0.45, 0.5][g];
+    if (Math.random() > survive) { st = g; break; }
+  }
+  p.survivedTo = st;
+  stream.push(p);
+}
+
+/* ============================================================
+   UMAP NEBULA — colored scatter on right
+   ============================================================ */
+const umap = [];
+function buildUMAP() {
+  const cx = (ZONES.umapStart + ZONES.umapEnd) / 2 + 60;
+  const cy = H / 2 + 40;
+  const N = 4200;
+  for (let i = 0; i < N; i++) {
+    // Multi-blob nebula
+    const blobs = [
+      { cx: cx - 80, cy: cy - 120, r: 180, score: 0.85 },
+      { cx: cx + 60, cy: cy + 60, r: 220, score: 0.55 },
+      { cx: cx - 40, cy: cy + 180, r: 140, score: 0.25 },
+      { cx: cx + 140, cy: cy - 160, r: 110, score: 0.92 },
+      { cx: cx - 160, cy: cy + 40, r: 90, score: 0.7 },
+    ];
+    const b = blobs[Math.floor(Math.random() * blobs.length)];
+    // gaussian-ish offset
+    const a = Math.random() * Math.PI * 2;
+    const r = Math.abs(randn()) * b.r;
+    const x = b.cx + Math.cos(a) * r;
+    const y = b.cy + Math.sin(a) * r;
+    const score = Math.max(0, Math.min(1, b.score + (Math.random() - 0.5) * 0.3));
+    umap.push({ x, y, score });
+  }
+}
+function randn() {
+  // Box-Muller
+  let u = 0, v = 0;
+  while (u === 0) u = Math.random();
+  while (v === 0) v = Math.random();
+  return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+}
+buildUMAP();
+
+function drawUMAP(ctx) {
+  ctx.save();
+  umap.forEach(p => {
+    // color along violet → cyan gradient
+    const t = p.score;
+    const r = Math.round(157 * (1-t) + 92 * t);
+    const g = Math.round(92 * (1-t) + 229 * t);
+    const b = Math.round(255 * (1-t) + 229 * t);
+    const alpha = 0.25 + t * 0.55;
+    ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+    if (t > 0.85) {
+      ctx.shadowBlur = 8;
+      ctx.shadowColor = `rgba(${r},${g},${b},0.8)`;
+    } else {
+      ctx.shadowBlur = 0;
+    }
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 1 + t * 1.6, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  ctx.restore();
+
+  // axes hint
+  const cx = (ZONES.umapStart + ZONES.umapEnd) / 2 + 60;
+  const cy = H / 2 + 40;
+  ctx.strokeStyle = "rgba(148,163,184,0.18)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(cx - 280, cy + 380); ctx.lineTo(cx + 280, cy + 380); // x axis
+  ctx.moveTo(cx - 280, cy + 380); ctx.lineTo(cx - 280, cy - 280); // y axis
+  ctx.stroke();
+  ctx.fillStyle = COLORS.dim;
+  ctx.font = '12px "JetBrains Mono", monospace';
+  ctx.fillText("UMAP-1", cx + 220, cy + 405);
+  ctx.save();
+  ctx.translate(cx - 300, cy + 60);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText("UMAP-2", 0, 0);
+  ctx.restore();
+}
+
+/* ============================================================
+   OUTPUT EXEMPLARS — bright detailed molecules in zone 4
+   ============================================================ */
+const outputHits = [];
+function buildOutputHits() {
+  const N = 28;
+  for (let i = 0; i < N; i++) {
+    const x = ZONES.outStart + 40 + Math.random() * (ZONES.outEnd - ZONES.outStart - 100);
+    const y = TOP + 60 + Math.random() * (BOT - TOP - 120);
+    outputHits.push({
+      x, y,
+      tmpl: moleculeTemplates[Math.floor(Math.random() * moleculeTemplates.length)],
+      scale: 0.9 + Math.random() * 1.2,
+      brightness: 0.55 + Math.random() * 0.45,
+      rot: Math.random() * Math.PI * 2,
+      spin: (Math.random() - 0.5) * 0.002,
+      bob: Math.random() * Math.PI * 2,
+      // cluster: tag a few clusters
+      cluster: Math.floor(Math.random() * 4),
+    });
+  }
+  // Featured exemplars (big & bright near callouts)
+  outputHits.push({
+    x: 2960, y: 1080, tmpl: moleculeTemplates[7],
+    scale: 2.6, brightness: 1, rot: 0.4, spin: 0.0008, bob: 0, cluster: 0, featured: true,
+  });
+  outputHits.push({
+    x: 3180, y: 1420, tmpl: moleculeTemplates[13],
+    scale: 2.0, brightness: 0.85, rot: -0.3, spin: -0.001, bob: 1, cluster: 1, featured: true,
+  });
+}
+buildOutputHits();
+
+// Cluster connectors
+function drawClusterConnectors(ctx) {
+  // Group hits by cluster, draw faint lines among nearby members
+  const byCluster = {};
+  outputHits.forEach((h, i) => {
+    (byCluster[h.cluster] = byCluster[h.cluster] || []).push(h);
+  });
+  ctx.strokeStyle = "rgba(92,229,229,0.15)";
+  ctx.lineWidth = 1;
+  Object.values(byCluster).forEach(group => {
+    for (let i = 0; i < group.length; i++) {
+      for (let j = i + 1; j < group.length; j++) {
+        const d = Math.hypot(group[i].x - group[j].x, group[i].y - group[j].y);
+        if (d < 280) {
+          ctx.beginPath();
+          ctx.moveTo(group[i].x, group[i].y);
+          ctx.lineTo(group[j].x, group[j].y);
+          ctx.stroke();
+        }
+      }
+    }
+  });
+}
+
+/* ============================================================
+   ANIMATION LOOP
+   ============================================================ */
+let t0 = performance.now();
+let animating = true;
+
+function frame(now) {
+  const elapsed = (now - t0) / 1000;
+  // mol-layer is dynamic
+  mol.clearRect(0, 0, W, H);
+
+  // 1) UMAP (static positions, draw once is fine, but it's cheap)
+  drawUMAP(mol);
+
+  // 2) Input cloud — gentle bob
+  inputCloud.forEach(p => {
+    const bob = Math.sin(elapsed * 0.6 + p.bob) * 2;
+    p.rot += p.spin;
+    drawMolecule(mol, p.tmpl, p.x, p.y + bob, p.scale, p.color, p.alpha);
+  });
+
+  // 3) Flowing stream
+  stream.forEach(p => {
+    p.t += p.speed;
+    p.rot += p.spin;
+    if (p.t > 1) {
+      // reset
+      p.t = 0;
+      p.yJitter = (Math.random() - 0.5) * 700;
+      p.pBBB = Math.random();
+      let st = 6;
+      for (let g = 0; g < 6; g++) {
+        const survive = [0.85, 0.6, 0.55, 0.55, 0.45, 0.5][g];
+        if (Math.random() > survive) { st = g; break; }
+      }
+      p.survivedTo = st;
+      p.rejected = false; p.rejTime = 0;
+    }
+
+    // Determine x along path
+    // 0..0.05 — approaching BBB
+    // 0.05..0.15 — through BBB
+    // 0.15..0.85 — through gates linearly
+    // 0.85..1 — output
+    let x, y, alpha, color, scale = p.scale;
+    if (p.t < 0.08) {
+      // approach BBB
+      const lt = p.t / 0.08;
+      x = p.xStart + lt * (ZONES.bbbStart - p.xStart);
+      y = H/2 + p.yJitter * 0.85;
+    } else if (p.t < 0.18) {
+      // through BBB
+      const lt = (p.t - 0.08) / 0.10;
+      x = ZONES.bbbStart + lt * (ZONES.bbbEnd - ZONES.bbbStart);
+      y = H/2 + p.yJitter * 0.6;
+    } else {
+      // through gates
+      const lt = (p.t - 0.18) / 0.82;
+      x = ZONES.bbbEnd + lt * (ZONES.umapStart - 100 - ZONES.bbbEnd);
+      y = H/2 + p.yJitter * (0.5 - lt * 0.35);
+    }
+
+    // Determine gate index at current x
+    let gateIdx = -1;
+    for (let g = 0; g < GATES.length - 1; g++) {
+      if (x > GATES[g]) gateIdx = g;
+    }
+    // Rejection logic
+    if (!p.rejected && gateIdx >= 0 && gateIdx > p.survivedTo) {
+      p.rejected = true;
+      p.rejTime = elapsed;
+      p.rejDir = Math.sign(p.yJitter || 1);
+      p.rejAngle = (Math.random() - 0.5) * 0.7;
+    }
+
+    if (p.rejected) {
+      // curve away
+      const dt = elapsed - p.rejTime;
+      // backward + outward, fading
+      x -= dt * 200;
+      y += p.rejDir * dt * 240 + p.rejAngle * dt * 200;
+      alpha = Math.max(0, 0.5 - dt * 0.5);
+      color = gateIdx === 4 ? COLORS.pink : COLORS.violet;
+      if (alpha < 0.02) {
+        // reset
+        p.t = 0;
+        p.yJitter = (Math.random() - 0.5) * 700;
+        let st = 6;
+        for (let g2 = 0; g2 < 6; g2++) {
+          const survive = [0.85, 0.6, 0.55, 0.55, 0.45, 0.5][g2];
+          if (Math.random() > survive) { st = g2; break; }
+        }
+        p.survivedTo = st;
+        p.rejected = false; p.rejTime = 0;
+        return;
+      }
+    } else {
+      // brightness grows as it survives gates
+      const passed = Math.max(0, gateIdx + 1);
+      alpha = 0.3 + Math.min(0.65, passed * 0.10);
+      // color shifts violet → cyan
+      const blend = Math.min(1, passed / 6);
+      color = blend > 0.6 ? COLORS.cyan : COLORS.violet;
+      scale = p.scale * (1 + blend * 0.3);
+    }
+
+    drawMolecule(mol, p.tmpl, x, y, scale, color, alpha);
+  });
+
+  // 4) Output hits
+  drawClusterConnectors(mol);
+  outputHits.forEach(h => {
+    h.rot += h.spin;
+    const bob = Math.sin(elapsed * 0.8 + h.bob) * 3;
+    // glow
+    mol.save();
+    mol.shadowColor = `rgba(92,229,229,${0.7 * h.brightness})`;
+    mol.shadowBlur = h.featured ? 28 : 14;
+    drawMolecule(mol, h.tmpl, h.x, h.y + bob, h.scale, COLORS.cyan, 0.6 + h.brightness * 0.4);
+    mol.restore();
+  });
+
+  if (animating) requestAnimationFrame(frame);
+}
+
+drawBackground();
+requestAnimationFrame(frame);
+
+/* ============================================================
+   FOREGROUND — small static overlays
+   ============================================================ */
+function drawForeground() {
+  const ctx = fg;
+  ctx.clearRect(0, 0, W, H);
+  // crosshair-style ticks at corners
+  ctx.strokeStyle = "rgba(148,163,184,0.4)";
+  ctx.lineWidth = 1.5;
+  const L = 24;
+  const M = 80;
+  const corners = [
+    [M, M], [W - M, M], [M, H - M], [W - M, H - M],
+  ];
+  corners.forEach(([cx, cy]) => {
+    ctx.beginPath();
+    ctx.moveTo(cx - L/2, cy); ctx.lineTo(cx + L/2, cy);
+    ctx.moveTo(cx, cy - L/2); ctx.lineTo(cx, cy + L/2);
+    ctx.stroke();
+  });
+}
+drawForeground();
+/* ============================================================
+   EMBED CONTROLS — IntersectionObserver + reduced motion
+   ============================================================ */
+
+// Expose minimal JS API on the root element
+const root = document.getElementById("viewport");
+const api = {
+  play() { if (!animating) { animating = true; t0 = performance.now(); requestAnimationFrame(frame); } },
+  pause() { animating = false; },
+  isPlaying() { return animating; },
+};
+root.bbbNuke = api;
+window.bbbNuke = api;
+
+// Respect prefers-reduced-motion
+const mqReduce = matchMedia("(prefers-reduced-motion: reduce)");
+function applyMotionPref() {
+  if (mqReduce.matches) api.pause();
+}
+applyMotionPref();
+mqReduce.addEventListener("change", applyMotionPref);
+
+// Pause when scrolled off-screen (saves CPU on long pages)
+if ("IntersectionObserver" in window) {
+  let userPaused = false;
+  const io = new IntersectionObserver(entries => {
+    for (const e of entries) {
+      if (mqReduce.matches) return;
+      if (e.isIntersecting) api.play();
+      else api.pause();
+    }
+  }, { threshold: 0.05 });
+  io.observe(root);
+}
+
+// Pause when page is hidden
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) api.pause();
+  else if (!mqReduce.matches) api.play();
+});
+
+</script>
+</body>
+</html>

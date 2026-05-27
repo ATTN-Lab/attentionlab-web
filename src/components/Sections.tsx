@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import type { ViewState } from "./types";
+
+const ScreeningContent = dynamic(
+  () => import("@/components/screening/ScreeningContent"),
+  { ssr: false }
+);
 
 const SectionShell = ({
   eyebrow,
@@ -1005,7 +1011,11 @@ function AIView() {
             </div>
           </div>
         </div>
-      </section>    </>
+      </section>
+
+      {/* 1B Compound Screen — full screening page content */}
+      <ScreeningContent />
+    </>
   );
 }
 
@@ -1022,15 +1032,16 @@ export default function Sections({
       {view === "bio" && <BioView />}
       {view === "ai" && <AIView />}
 
-      {/* Team — shared across all views */}
-      <section id="team" className="py-20 border-b border-gray-100">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="text-xs uppercase tracking-[0.2em] text-gray-700 font-semibold mb-10">
-            The Team
+      {view !== "ai" && (
+        <section id="team" className="py-20 border-b border-gray-100">
+          <div className="max-w-5xl mx-auto px-6">
+            <div className="text-xs uppercase tracking-[0.2em] text-gray-700 font-semibold mb-10">
+              The Team
+            </div>
+            <TeamCarousel />
           </div>
-          <TeamCarousel />
-        </div>
-      </section>
+        </section>
+      )}
     </div>
   );
 }

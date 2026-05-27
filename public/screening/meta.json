@@ -27,7 +27,7 @@
     },
     "provenance_map": {
       "0": "enamine_real",
-      "1": "existing"
+      "1": "zinc"
     }
   },
   "total_screened": 1023158502,
@@ -50,7 +50,7 @@
     "umap3d_z"
   ],
   "provenance_counts": {
-    "existing": 360518,
+    "zinc": 360518,
     "enamine_real": 99326
   }
 }

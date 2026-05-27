@@ -23,7 +23,7 @@ type ColorMode =
   | "tpsa"
   | "provenance";
 
-const COLOR_RAMPS: Record<string, [THREE.Color, THREE.Color]> = {
+const COLOR_RAMPS: Record<string, THREE.Color[]> = {
   bbb_score: [new THREE.Color("#1e3a5f"), new THREE.Color("#5ce5e5")],
   cns_mpo: [new THREE.Color("#2d1b4e"), new THREE.Color("#9d5cff")],
   pka: [new THREE.Color("#4a1942"), new THREE.Color("#f472b6")],
@@ -35,8 +35,14 @@ const COLOR_RAMPS: Record<string, [THREE.Color, THREE.Color]> = {
 const PROVENANCE_COLORS: Record<string, THREE.Color> = {
   enamine_real: new THREE.Color("#9d5cff"),
   pubchem: new THREE.Color("#5ce5e5"),
-  existing: new THREE.Color("#f472b6"),
+  zinc: new THREE.Color("#f472b6"),
   unknown: new THREE.Color("#94a3b8"),
+};
+
+const PROVENANCE_LABELS: Record<string, string> = {
+  enamine_real: "Enamine REAL",
+  pubchem: "PubChem",
+  zinc: "ZINC",
 };
 
 const COLOR_MODE_LABELS: Record<ColorMode, string> = {
@@ -96,9 +102,15 @@ function buildColorBuffer(
     const vals = data.colorArrays[mode];
     const ramp = COLOR_RAMPS[mode] || COLOR_RAMPS.bbb_score;
     const tmp = new THREE.Color();
+    const nStops = ramp.length;
     if (vals) {
       for (let i = 0; i < n; i++) {
-        tmp.copy(ramp[0]).lerp(ramp[1], vals[i]);
+        const t = Math.max(0, Math.min(1, vals[i]));
+        const scaled = t * (nStops - 1);
+        const lo = Math.floor(scaled);
+        const hi = Math.min(lo + 1, nStops - 1);
+        const frac = scaled - lo;
+        tmp.copy(ramp[lo]).lerp(ramp[hi], frac);
         colors[i * 3] = tmp.r;
         colors[i * 3 + 1] = tmp.g;
         colors[i * 3 + 2] = tmp.b;
@@ -437,13 +449,9 @@ export default function PointCloudViewer({
                   className="h-2 w-24 rounded-full"
                   style={{
                     background: `linear-gradient(to right, ${
-                      COLOR_RAMPS[colorMode]?.[0]
-                        ? `#${COLOR_RAMPS[colorMode][0].getHexString()}`
-                        : "#1e3a5f"
-                    }, ${
-                      COLOR_RAMPS[colorMode]?.[1]
-                        ? `#${COLOR_RAMPS[colorMode][1].getHexString()}`
-                        : "#5ce5e5"
+                      (COLOR_RAMPS[colorMode] || [])
+                        .map((c, i, arr) => `#${c.getHexString()} ${(i / (arr.length - 1) * 100).toFixed(0)}%`)
+                        .join(", ")
                     })`,
                   }}
                 />
@@ -466,40 +474,25 @@ export default function PointCloudViewer({
                 Data Source
               </div>
               <div className="space-y-1">
-                {Object.entries(meta.provenance_counts).map(
-                  ([name, count]) => (
+                {Object.keys(PROVENANCE_COLORS)
+                  .filter((k) => k !== "unknown")
+                  .map((name) => (
                     <div key={name} className="flex items-center gap-2">
                       <div
                         className="w-2.5 h-2.5 rounded-full"
                         style={{
-                          backgroundColor: `#${(
-                            PROVENANCE_COLORS[name] ||
-                            PROVENANCE_COLORS.unknown
-                          ).getHexString()}`,
+                          backgroundColor: `#${PROVENANCE_COLORS[name].getHexString()}`,
                         }}
                       />
                       <span className="text-[10px] text-gray-300">
-                        {name.replace("_", " ")} ({count.toLocaleString()})
+                        {PROVENANCE_LABELS[name] || name}
                       </span>
                     </div>
-                  )
-                )}
+                  ))}
               </div>
             </div>
           )}
 
-          {/* Stats badge */}
-          <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-sm rounded-xl p-3 text-right">
-            <div className="text-2xl font-bold text-white">
-              {meta.n_points.toLocaleString()}
-            </div>
-            <div className="text-[10px] text-gray-400">
-              representative compounds shown
-            </div>
-            <div className="text-[10px] text-gray-500 mt-1">
-              of {meta.total_screened.toLocaleString()} screened
-            </div>
-          </div>
         </>
       )}
     </div>

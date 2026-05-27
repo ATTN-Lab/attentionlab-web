@@ -2,7 +2,7 @@
   "total_compounds": 1023158502,
   "by_provenance": {
     "enamine_real": 181715968,
-    "existing": 779326410,
+    "zinc": 779326410,
     "pubchem": 62116124
   },
   "p_bbb": {
@@ -11,7 +11,8 @@
     "std": 0.3143,
     "hits_05": 717681556,
     "hits_07": 540573323,
-    "hits_09": 193275355
+    "hits_09": 193275355,
+    "hits_098": 9432804
   },
   "cns_mpo": {
     "mean": 3.97,
