@@ -258,12 +258,34 @@ function LabsView({
 }) {
   return (
     <>
-      <SectionShell eyebrow="North Star" title="Enhance human intelligence.">
-        The human mind is the last great frontier. We build the AI to
-        discover the drugs that expand what it can do. We leverage AI to
-        unlock discoveries essential to addressing unmet need in brain
-        disorders, pushing the boundaries of human capacity and experience.
-      </SectionShell>
+      <section className="py-20 border-b border-gray-100">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-xs uppercase tracking-[0.2em] text-gray-400 mb-3">
+            North Star
+          </div>
+          <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-6">
+            Enhance human intelligence.
+          </h2>
+          <div className="text-gray-600 text-lg leading-relaxed max-w-3xl">
+            The human mind is the last great frontier. We build the AI to
+            discover the drugs that expand what it can do. We leverage AI to
+            unlock discoveries essential to addressing unmet need in brain
+            disorders, pushing the boundaries of human capacity and experience.
+          </div>
+
+          <a
+            href="https://bbbnukeestorage7791b0f55.blob.core.windows.net/media/bbb-nuke-launch.mp4"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 mt-8 text-sm text-gray-500 hover:text-gray-900 transition-colors group"
+          >
+            <svg className="w-4 h-4 text-gray-400 group-hover:text-[#3E317D] transition-colors" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+            Watch our launch video
+          </a>
+        </div>
+      </section>
 
       <section className="py-20 border-b border-gray-100">
         <div className="max-w-5xl mx-auto px-6">
@@ -779,18 +801,6 @@ function AIView() {
               below.
             </p>
           </div>
-
-          <a
-            href="https://bbbnukeestorage7791b0f55.blob.core.windows.net/media/bbb-nuke-launch.mp4"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 mt-8 text-sm text-gray-500 hover:text-gray-900 transition-colors group"
-          >
-            <svg className="w-4 h-4 text-gray-400 group-hover:text-[#3E317D] transition-colors" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M8 5v14l11-7z" />
-            </svg>
-            Watch our launch video
-          </a>
         </div>
       </section>
 
