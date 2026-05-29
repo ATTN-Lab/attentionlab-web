@@ -1,0 +1,24 @@
+{
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": [
+      "/images/*.{png,jpg,jpeg,gif,webp,svg}",
+      "/favicon.ico",
+      "/favicon.svg",
+      "/favicon-96x96.png",
+      "/apple-touch-icon.png",
+      "/site.webmanifest"
+    ]
+  },
+  "routes": [
+    {
+      "route": "/check-in",
+      "rewrite": "/check-in/index.html"
+    }
+  ],
+  "globalHeaders": {
+    "X-Frame-Options": "SAMEORIGIN",
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "strict-origin-when-cross-origin"
+  }
+}

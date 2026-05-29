@@ -1,11 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
 
 const SITE_URL = "https://attentionlab.ai";
 const SITE_TITLE = "Attention Labs — Making Humans Intelligent with AI";
@@ -74,7 +68,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased bg-white text-[#0a0a0a]`}>
+      <body className="antialiased bg-white text-[#0a0a0a]">
         {children}
       </body>
     </html>
