@@ -779,6 +779,18 @@ function AIView() {
               below.
             </p>
           </div>
+
+          <a
+            href="https://bbbnukeestorage7791b0f55.blob.core.windows.net/media/bbb-nuke-launch.mp4"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 mt-8 text-sm text-gray-500 hover:text-gray-900 transition-colors group"
+          >
+            <svg className="w-4 h-4 text-gray-400 group-hover:text-[#3E317D] transition-colors" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+            Watch our launch video
+          </a>
         </div>
       </section>
 
@@ -844,18 +856,6 @@ function AIView() {
               CNS drug, but whether it will actually behave like one.
             </p>
           </div>
-
-          <a
-            href="https://bbbnukeestorage7791b0f55.blob.core.windows.net/media/bbb-nuke-launch.mp4"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 mt-8 text-sm text-gray-500 hover:text-gray-900 transition-colors group"
-          >
-            <svg className="w-4 h-4 text-gray-400 group-hover:text-[#3E317D] transition-colors" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M8 5v14l11-7z" />
-            </svg>
-            Watch our launch video
-          </a>
         </div>
       </section>
       {/* Benchmarks */}
