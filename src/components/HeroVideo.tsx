@@ -94,7 +94,7 @@ export default function HeroVideo() {
         <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold tracking-tight drop-shadow-lg">
           Attention Labs
         </h1>
-        <p className="mt-4 text-base sm:text-lg md:text-2xl font-light drop-shadow">
+        <p className="mt-4 text-base sm:text-lg md:text-2xl font-normal drop-shadow">
           Making Humans Intelligent with AI
         </p>
       </div>
