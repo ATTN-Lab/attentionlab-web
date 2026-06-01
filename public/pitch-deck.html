@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attention Labs — Pitch Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #000;
+  --white: #fff;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-900: #111827;
+  --violet: #9d5cff;
+  --cyan: #5ce5e5;
+  --brand: #3E317D;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--white);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.deck { width: 100vw; height: 100vh; position: relative; }
+
+.slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 8vh 10vw;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.slide.active { opacity: 1; pointer-events: auto; }
+.slide .fragment {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.slide .fragment.visible { opacity: 1; transform: translateY(0); }
+
+.eyebrow {
+  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gray-400); font-weight: 600; margin-bottom: 20px;
+}
+h1 { font-size: clamp(40px, 6vw, 80px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
+h2 { font-size: clamp(32px, 4.5vw, 64px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+h3 { font-size: clamp(20px, 2vw, 28px); font-weight: 700; line-height: 1.2; }
+
+.body-text {
+  font-size: clamp(16px, 1.4vw, 22px); color: rgba(255,255,255,0.6);
+  line-height: 1.7; max-width: 720px;
+}
+.gradient-text {
+  background: linear-gradient(135deg, var(--violet), var(--cyan));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.stat-row { display: flex; gap: 60px; flex-wrap: wrap; }
+.stat { display: flex; flex-direction: column; }
+.stat-value { font-size: clamp(36px, 4vw, 56px); font-weight: 800; }
+.stat-label { font-size: 13px; color: var(--gray-400); margin-top: 4px; max-width: 180px; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+
+.card {
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 16px;
+  padding: 36px; background: rgba(255,255,255,0.03);
+}
+
+.bar-group { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+.bar-item { display: flex; flex-direction: column; gap: 4px; }
+.bar-header { display: flex; justify-content: space-between; font-size: 13px; }
+.bar-header span:first-child { color: rgba(255,255,255,0.7); font-weight: 500; }
+.bar-header span:last-child { color: var(--gray-500); }
+.bar-track { height: 6px; background: rgba(255,255,255,0.05); border-radius: 3px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--violet), var(--cyan)); }
+
+.bench-row { display: flex; align-items: flex-end; gap: 16px; height: 200px; padding-top: 20px; }
+.bench-bar { display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%; justify-content: flex-end; }
+.bench-bar-fill { width: 100%; max-width: 56px; border-radius: 4px 4px 0 0; transition: height 1s cubic-bezier(0.22, 1, 0.36, 1); }
+.bench-bar-label { font-size: 11px; color: var(--gray-500); margin-top: 8px; text-align: center; }
+.bench-bar-value { font-size: 12px; font-weight: 600; margin-bottom: 6px; }
+
+.team-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; }
+.team-member { text-align: center; }
+.team-photo { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 12px; margin-bottom: 12px; filter: grayscale(0.2); }
+.team-name { font-size: 14px; font-weight: 600; }
+.team-role { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
+
+.nav {
+  position: fixed; bottom: 32px; right: 40px;
+  display: flex; align-items: center; gap: 16px; z-index: 100;
+}
+.nav-counter { font-size: 12px; color: var(--gray-500); font-variant-numeric: tabular-nums; }
+.nav-btn {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15); background: none;
+  color: rgba(255,255,255,0.5); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.2s, color 0.2s;
+}
+.nav-btn:hover { border-color: rgba(255,255,255,0.4); color: white; }
+
+.progress-bar {
+  position: fixed; top: 0; left: 0; height: 2px;
+  background: linear-gradient(90deg, var(--violet), var(--cyan));
+  transition: width 0.4s ease; z-index: 100;
+}
+
+.video-container {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center; background: #000;
+}
+.video-container video {
+  max-width: 50vh; max-height: 85vh; border-radius: 12px;
+  box-shadow: 0 0 80px rgba(157, 92, 255, 0.15);
+}
+
+.slide-dark { background: #000; }
+
+/* Hero background iframe */
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+  border: none; width: 100%; height: 100%;
+  opacity: 0.4;
+}
+.slide-hero { position: relative; }
+.slide-hero > *:not(.hero-bg) { position: relative; z-index: 1; }
+
+/* UMAP canvas */
+.umap-canvas {
+  width: 100%; height: 280px; border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: #050510;
+}
+
+/* Ask slide */
+.ask-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+  margin-top: 48px; align-items: start;
+}
+.ask-number {
+  font-size: clamp(48px, 6vw, 80px); font-weight: 900;
+  line-height: 1;
+}
+.ask-label {
+  font-size: 15px; color: var(--gray-400); margin-top: 8px;
+  font-weight: 500;
+}
+.ask-detail {
+  font-size: 14px; color: rgba(255,255,255,0.35);
+  margin-top: 4px; line-height: 1.5;
+}
+.ask-divider {
+  width: 100%; height: 1px;
+  background: rgba(255,255,255,0.06);
+  margin: 32px 0;
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<div class="deck" id="deck">
+
+  <!-- 1. Title -->
+  <div class="slide slide-dark" data-fragments="3">
+    <div class="fragment">
+      <img src="/logo-live.png" alt="Attention Labs" style="height:28px; margin-bottom:32px; opacity:0.9;">
+    </div>
+    <div class="fragment">
+      <h1>Attention Labs</h1>
+      <p class="body-text" style="font-size:clamp(20px,2vw,32px); color:rgba(255,255,255,0.8); font-weight:400; margin-top:16px;">
+        Making humans intelligent with AI
+      </p>
+    </div>
+    <div class="fragment" style="margin-top:40px;">
+      <div style="display:inline-flex; align-items:center; gap:12px; padding:10px 20px; border:1px solid rgba(255,255,255,0.1); border-radius:100px;">
+        <span style="font-size:13px; color:var(--gray-400); font-weight:500; letter-spacing:0.05em;">a16z Speedrun Pitch Day</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Launch Video -->
+  <div class="slide slide-dark" data-fragments="1" style="padding:0;">
+    <div class="video-container fragment">
+      <video id="launch-video" src="https://bbbnukeestorage7791b0f55.blob.core.windows.net/media/bbb-nuke-launch.mp4" playsinline></video>
+    </div>
+  </div>
+
+  <!-- 3. North Star -->
+  <div class="slide slide-dark" data-fragments="2">
+    <div class="fragment">
+      <div class="eyebrow">North Star</div>
+      <h2>Enhance human<br>intelligence.</h2>
+    </div>
+    <div class="fragment" style="margin-top:32px;">
+      <p class="body-text">
+        The human mind is the last great frontier. We build the AI to discover the drugs that expand what it can do. We leverage AI to unlock discoveries essential to addressing unmet need in brain disorders, pushing the boundaries of human capacity and experience.
+      </p>
+    </div>
+  </div>
+
+  <!-- 4. Two Divisions -->
+  <div class="slide slide-dark" data-fragments="2">
+    <div class="fragment"><h2>Two trajectories.<br>One mission.</h2></div>
+    <div class="fragment" style="margin-top:48px;">
+      <div class="grid-2">
+        <div class="card">
+          <div class="eyebrow" style="color:var(--violet);">Attention Bio</div>
+          <h3>Drug therapies<br>for the mind.</h3>
+          <p style="color:rgba(255,255,255,0.5); margin-top:12px; font-size:15px; line-height:1.6;">
+            First-in-class drugs for the brain — from ADHD in childhood to cognitive decline in old age.
+          </p>
+        </div>
+        <div class="card">
+          <div class="eyebrow" style="color:var(--cyan);">Attention AI</div>
+          <h3>AI for the brain.</h3>
+          <p style="color:rgba(255,255,255,0.5); margin-top:12px; font-size:15px; line-height:1.6;">
+            Bespoke models that find what others can't — molecules that cross the BBB and the biology that decides whether they work.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. ATTN001 -->
+  <div class="slide slide-dark" data-fragments="3">
+    <div class="fragment">
+      <div class="eyebrow">Lead Asset</div>
+      <h2>ATTN001.</h2>
+      <p style="margin-top:12px; font-size:clamp(18px,1.8vw,26px); font-weight:600; color:rgba(255,255,255,0.8); max-width:640px;">
+        A potential first-in-class D2 dopamine receptor agonist for ADHD.
+      </p>
+    </div>
+    <div class="fragment" style="margin-top:32px;">
+      <p class="body-text">
+        Discovered by BBB-Nuke. A non-stimulant candidate for a condition the field has not delivered a new chemical entity for in decades. 25% of patients see no benefit from any approved therapy.
+      </p>
+    </div>
+    <div class="fragment" style="margin-top:40px;">
+      <div class="stat-row">
+        <div class="stat">
+          <div class="stat-value gradient-text">366M</div>
+          <div class="stat-label">Adults with ADHD worldwide</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value gradient-text">129M</div>
+          <div class="stat-label">Children with ADHD worldwide</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value gradient-text">25%</div>
+          <div class="stat-label">Do not respond to any approved therapy</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Mechanism -->
+  <div class="slide slide-dark" data-fragments="2">
+    <div class="fragment">
+      <div class="eyebrow">Mechanism</div>
+      <h2>A measured stream,<br>not a flood.</h2>
+    </div>
+    <div class="fragment" style="margin-top:32px;">
+      <div class="grid-2">
+        <p class="body-text" style="max-width:none;">
+          ATTN001 selectively activates the presynaptic D2 autoreceptor. Chronic activation internalizes these receptors, releasing their brake on dopamine synthesis — a sustained, physiologic increase across the prefrontal cortex. Fundamentally different from amphetamines.
+        </p>
+        <div style="position:relative; border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,0.08); background:#000;">
+          <video src="/attn001-activation.mp4" autoplay muted loop playsinline style="width:100%; display:block;"></video>
+          <div style="position:absolute; bottom:0; left:0; right:0; padding:8px 12px; background:linear-gradient(to top, rgba(0,0,0,0.8), transparent); font-size:11px; color:rgba(255,255,255,0.6);">
+            ATTN001 activating D2 receptors in live HEK293A cells
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Next Program -->
+  <div class="slide slide-dark" data-fragments="2">
+    <div class="fragment">
+      <div class="eyebrow">Next Program</div>
+      <h2 style="max-width:800px;">A dual GLP-1R / TAAR1 agonist for substance use disorder.</h2>
+    </div>
+    <div class="fragment" style="margin-top:32px;">
+      <p class="body-text">
+        GLP-1R agonists are showing 50–56% lower risk of alcohol use disorder. TAAR1 agonism blunts the reinforcing effects of stimulants. We are designing a single molecule that engages both receptors simultaneously. No existing therapy offers this combination.
+      </p>
+    </div>
+  </div>
+
+  <!-- 8. BBB-Nuke with hero -->
+  <div class="slide slide-dark slide-hero" data-fragments="3">
+    <iframe class="hero-bg" src="/bbb-nuke-hero.html" loading="lazy" sandbox="allow-scripts allow-same-origin" title=""></iframe>
+    <div class="fragment">
+      <div class="eyebrow">Platform</div>
+      <h2>BBB-Nuke.</h2>
+      <p style="margin-top:12px; font-size:clamp(16px,1.5vw,22px); color:rgba(255,255,255,0.7); max-width:640px; line-height:1.6;">
+        The state-of-the-art AI platform for designing drugs that reach the brain.
+      </p>
+    </div>
+    <div class="fragment" style="margin-top:40px;">
+      <div class="stat-row">
+        <div class="stat">
+          <div class="stat-value gradient-text">0.933</div>
+          <div class="stat-label">AUROC, 5-fold CV</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" style="color:#22c55e;">+30%</div>
+          <div class="stat-label">Accuracy over CNS-MPO</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value gradient-text">&lt;1s</div>
+          <div class="stat-label">Per compound inference</div>
+        </div>
+      </div>
+    </div>
+    <div class="fragment" style="margin-top:32px;">
+      <p class="body-text">
+        Extends physicochemical foundations with efflux pumps, metabolic clearance, and protein-mediated transport — biology the old models leave out.
+      </p>
+    </div>
+  </div>
+
+  <!-- 9. Benchmarks -->
+  <div class="slide slide-dark" data-fragments="2">
+    <div class="fragment">
+      <div class="eyebrow">Benchmarks</div>
+      <h2>Head to head.</h2>
+    </div>
+    <div class="fragment" style="margin-top:40px;">
+      <div class="grid-2">
+        <div>
+          <h3 style="margin-bottom:20px; font-size:15px; color:var(--gray-400);">AUROC</h3>
+          <div class="bench-row">
+            <div class="bench-bar"><div class="bench-bar-value gradient-text">0.93</div><div class="bench-bar-fill" data-h="93" style="background:linear-gradient(to top, var(--brand), var(--violet)); height:0%;"></div><div class="bench-bar-label">BBB-Nuke</div></div>
+            <div class="bench-bar"><div class="bench-bar-value" style="color:var(--gray-500);">0.84</div><div class="bench-bar-fill" data-h="84" style="background:var(--gray-600); height:0%;"></div><div class="bench-bar-label">LightBBB</div></div>
+            <div class="bench-bar"><div class="bench-bar-value" style="color:var(--gray-500);">0.82</div><div class="bench-bar-fill" data-h="82" style="background:var(--gray-600); height:0%;"></div><div class="bench-bar-label">ADMETlab</div></div>
+            <div class="bench-bar"><div class="bench-bar-value" style="color:var(--gray-500);">0.79</div><div class="bench-bar-fill" data-h="79" style="background:var(--gray-600); height:0%;"></div><div class="bench-bar-label">BBB-Score</div></div>
+            <div class="bench-bar"><div class="bench-bar-value" style="color:var(--gray-500);">0.72</div><div class="bench-bar-fill" data-h="72" style="background:var(--gray-600); height:0%;"></div><div class="bench-bar-label">CNS-MPO</div></div>
+          </div>
+        </div>
+        <div>
+          <h3 style="margin-bottom:20px; font-size:15px; color:var(--gray-400);">Accuracy</h3>
+          <div class="bench-row">
+            <div class="bench-bar"><div class="bench-bar-value gradient-text">88%</div><div class="bench-bar-fill" data-h="88" style="background:linear-gradient(to top, var(--brand), var(--violet)); height:0%;"></div><div class="bench-bar-label">BBB-Nuke</div></div>
+            <div class="bench-bar"><div class="bench-bar-value" style="color:var(--gray-500);">78%</div><div class="bench-bar-fill" data-h="78" style="background:var(--gray-600); height:0%;"></div><div class="bench-bar-label">LightBBB</div></div>
+            <div class="bench-bar"><div class="bench-bar-value" style="color:var(--gray-500);">75%</div><div class="bench-bar-fill" data-h="75" style="background:var(--gray-600); height:0%;"></div><div class="bench-bar-label">ADMETlab</div></div>
+            <div class="bench-bar"><div class="bench-bar-value" style="color:var(--gray-500);">73%</div><div class="bench-bar-fill" data-h="73" style="background:var(--gray-600); height:0%;"></div><div class="bench-bar-label">BBB-Score</div></div>
+            <div class="bench-bar"><div class="bench-bar-value" style="color:var(--gray-500);">58%</div><div class="bench-bar-fill" data-h="58" style="background:var(--gray-600); height:0%;"></div><div class="bench-bar-label">CNS-MPO</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. 1B Screen with UMAP -->
+  <div class="slide slide-dark" data-fragments="3">
+    <div class="fragment">
+      <div class="eyebrow">The Screen</div>
+      <h2>One billion molecules.<br><span class="gradient-text">Every single one scored.</span></h2>
+    </div>
+    <div class="fragment" style="margin-top:32px;">
+      <div class="grid-2">
+        <div>
+          <div class="stat-row" style="flex-direction:column; gap:16px;">
+            <div class="stat">
+              <div class="stat-value gradient-text" style="font-size:clamp(28px,3vw,44px);">1.02 B</div>
+              <div class="stat-label">Compounds screened</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value gradient-text" style="font-size:clamp(28px,3vw,44px);">9.4 M</div>
+              <div class="stat-label">BBB+ hits (P ≥ 0.98)</div>
+            </div>
+            <div class="stat">
+              <div class="stat-value gradient-text" style="font-size:clamp(28px,3vw,44px);">58.6 M</div>
+              <div class="stat-label">Unique scaffolds</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <canvas id="umap-canvas" class="umap-canvas"></canvas>
+          <div style="font-size:11px; color:var(--gray-500); margin-top:8px; text-align:center;">
+            460K compounds projected into chemical space via UMAP — colored by P(BBB)
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="fragment" style="margin-top:24px;">
+      <div class="bar-group" style="max-width:480px;">
+        <div class="bar-item"><div class="bar-header"><span>ZINC</span><span>779M</span></div><div class="bar-track"><div class="bar-fill" style="width:76%;"></div></div></div>
+        <div class="bar-item"><div class="bar-header"><span>Enamine REAL</span><span>182M</span></div><div class="bar-track"><div class="bar-fill" style="width:18%;"></div></div></div>
+        <div class="bar-item"><div class="bar-header"><span>PubChem</span><span>62M</span></div><div class="bar-track"><div class="bar-fill" style="width:6%;"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11. Developer Access -->
+  <div class="slide slide-dark" data-fragments="2">
+    <div class="fragment">
+      <div class="eyebrow">Developer Access</div>
+      <h2>Three ways to<br>run BBB-Nuke.</h2>
+    </div>
+    <div class="fragment" style="margin-top:40px;">
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
+        <div class="card">
+          <div style="font-size:12px; color:var(--gray-500); font-family:monospace; margin-bottom:12px;">01</div>
+          <h3>MCP Server</h3>
+          <p style="color:rgba(255,255,255,0.4); margin-top:8px; font-size:14px; line-height:1.6;">Claude + AI agents call BBB-Nuke as a native tool.</p>
+        </div>
+        <div class="card">
+          <div style="font-size:12px; color:var(--gray-500); font-family:monospace; margin-bottom:12px;">02</div>
+          <h3>REST API</h3>
+          <p style="color:rgba(255,255,255,0.4); margin-top:8px; font-size:14px; line-height:1.6;">Score any SMILES with a single HTTPS call.</p>
+        </div>
+        <div class="card">
+          <div style="font-size:12px; color:var(--gray-500); font-family:monospace; margin-bottom:12px;">03</div>
+          <h3>Enterprise</h3>
+          <p style="color:rgba(255,255,255,0.4); margin-top:8px; font-size:14px; line-height:1.6;">On-premise CLI + web app. No SMILES leave your network.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12. Team -->
+  <div class="slide slide-dark" data-fragments="2">
+    <div class="fragment">
+      <div class="eyebrow">The Team</div>
+      <h2>Built by scientists.</h2>
+    </div>
+    <div class="fragment" style="margin-top:48px;">
+      <div class="team-grid">
+        <div class="team-member">
+          <img class="team-photo" src="/team/temi.png" alt="Temi">
+          <div class="team-name">Temitope Sobodu, PhD</div>
+          <div class="team-role">Founder & CEO</div>
+        </div>
+        <div class="team-member">
+          <img class="team-photo" src="/team/noah.png" alt="Noah">
+          <div class="team-name">Noah Abasciano</div>
+          <div class="team-role">Founding · Data</div>
+        </div>
+        <div class="team-member">
+          <img class="team-photo" src="/team/hamid.png" alt="Hamid">
+          <div class="team-name">Hamid Hadipour</div>
+          <div class="team-role">Founding · AI</div>
+        </div>
+        <div class="team-member">
+          <img class="team-photo" src="/team/abhishek.png" alt="Abhishek">
+          <div class="team-name">Abhishek Poddar, PhD</div>
+          <div class="team-role">Founding · Neuro</div>
+        </div>
+        <div class="team-member">
+          <img class="team-photo" src="/team/jack.png" alt="Jack">
+          <div class="team-name">Jack Rudrum</div>
+          <div class="team-role">Founding · Bioeng</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13. The Ask -->
+  <div class="slide slide-dark" data-fragments="3">
+    <div class="fragment">
+      <div class="eyebrow">The Ask</div>
+      <h2>Seed Round.</h2>
+    </div>
+    <div class="fragment" style="margin-top:48px;">
+      <div class="ask-grid">
+        <div>
+          <div class="ask-number gradient-text">$12M</div>
+          <div class="ask-label">Seed raise</div>
+        </div>
+        <div>
+          <div class="ask-number" style="color:rgba(255,255,255,0.9);">$60M</div>
+          <div class="ask-label">Pre-money valuation</div>
+        </div>
+      </div>
+      <div class="ask-divider"></div>
+    </div>
+    <div class="fragment">
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:32px; margin-top:8px;">
+        <div>
+          <div style="font-size:15px; font-weight:600; color:rgba(255,255,255,0.8);">Advance ATTN001</div>
+          <div class="ask-detail">IND-enabling studies and preclinical validation</div>
+        </div>
+        <div>
+          <div style="font-size:15px; font-weight:600; color:rgba(255,255,255,0.8);">Scale BBB-Nuke</div>
+          <div class="ask-detail">Enterprise platform, API infrastructure, next-gen model</div>
+        </div>
+        <div>
+          <div style="font-size:15px; font-weight:600; color:rgba(255,255,255,0.8);">Grow the team</div>
+          <div class="ask-detail">Medicinal chemistry, ML engineering, regulatory</div>
+        </div>
+      </div>
+      <div style="margin-top:48px;">
+        <p style="font-size:14px; color:var(--gray-500);">
+          temi@attentionlab.ai&ensp;·&ensp;attentionlab.ai
+        </p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="nav">
+  <span class="nav-counter" id="counter">1 / 13</span>
+  <button class="nav-btn" id="prev-btn" aria-label="Previous">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="nav-btn" id="next-btn" aria-label="Next">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 6 15 12 9 18"/></svg>
+  </button>
+</div>
+
+<script>
+// UMAP procedural visualization
+(function drawUMAP() {
+  const canvas = document.getElementById('umap-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.scale(dpr, dpr);
+  const W = rect.width, H = rect.height;
+
+  const clusters = [
+    { cx: 0.2, cy: 0.3, r: 0.12, n: 800, score: 0.3 },
+    { cx: 0.35, cy: 0.65, r: 0.14, n: 900, score: 0.5 },
+    { cx: 0.55, cy: 0.35, r: 0.1, n: 700, score: 0.7 },
+    { cx: 0.7, cy: 0.6, r: 0.13, n: 850, score: 0.85 },
+    { cx: 0.85, cy: 0.3, r: 0.09, n: 600, score: 0.95 },
+    { cx: 0.15, cy: 0.7, r: 0.08, n: 400, score: 0.2 },
+    { cx: 0.5, cy: 0.7, r: 0.1, n: 500, score: 0.6 },
+    { cx: 0.78, cy: 0.75, r: 0.07, n: 350, score: 0.9 },
+  ];
+
+  function scoreColor(s) {
+    const r = Math.round(157 * (1-s) + 92 * s);
+    const g = Math.round(92 * (1-s) + 229 * s);
+    const b = Math.round(255 * (1-s) + 229 * s);
+    return `rgba(${r},${g},${b},`;
+  }
+
+  clusters.forEach(cl => {
+    const base = scoreColor(cl.score);
+    for (let i = 0; i < cl.n; i++) {
+      const angle = Math.random() * Math.PI * 2;
+      const dist = Math.random() * cl.r;
+      const x = (cl.cx + Math.cos(angle) * dist) * W;
+      const y = (cl.cy + Math.sin(angle) * dist) * H;
+      const alpha = 0.3 + Math.random() * 0.5;
+      ctx.fillStyle = base + alpha + ')';
+      ctx.beginPath();
+      ctx.arc(x, y, 1 + Math.random() * 0.8, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  });
+})();
+
+// Deck logic
+const slides = [...document.querySelectorAll('.slide')];
+const total = slides.length;
+let current = 0;
+let fragmentIndex = 0;
+
+function getFragments(slide) {
+  return [...slide.querySelectorAll('.fragment')];
+}
+
+function showSlide(idx, direction) {
+  slides.forEach((s, i) => {
+    s.classList.toggle('active', i === idx);
+    if (i !== idx) getFragments(s).forEach(f => f.classList.remove('visible'));
+  });
+
+  const frags = getFragments(slides[idx]);
+  if (direction === 'forward') {
+    fragmentIndex = 0;
+    if (frags.length > 0) { frags[0].classList.add('visible'); fragmentIndex = 1; }
+  } else {
+    frags.forEach(f => f.classList.add('visible'));
+    fragmentIndex = frags.length;
+  }
+
+  document.getElementById('counter').textContent = `${idx + 1} / ${total}`;
+  document.getElementById('progress').style.width = `${((idx + 1) / total) * 100}%`;
+
+  const video = slides[idx].querySelector('video');
+  if (video) { video.currentTime = 0; video.play().catch(() => {}); }
+  slides.forEach((s, i) => { if (i !== idx) { const v = s.querySelector('video'); if (v) v.pause(); } });
+
+  if (slides[idx].querySelector('.bench-bar-fill')) {
+    setTimeout(() => {
+      slides[idx].querySelectorAll('.bench-bar-fill').forEach(bar => {
+        bar.style.height = bar.dataset.h + '%';
+      });
+    }, 300);
+  }
+}
+
+function advance() {
+  const frags = getFragments(slides[current]);
+  if (fragmentIndex < frags.length) { frags[fragmentIndex].classList.add('visible'); fragmentIndex++; }
+  else if (current < total - 1) { current++; showSlide(current, 'forward'); }
+}
+
+function retreat() {
+  const frags = getFragments(slides[current]);
+  if (fragmentIndex > 1) { fragmentIndex--; frags[fragmentIndex].classList.remove('visible'); }
+  else if (current > 0) { current--; showSlide(current, 'backward'); }
+}
+
+document.getElementById('next-btn').addEventListener('click', advance);
+document.getElementById('prev-btn').addEventListener('click', retreat);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); advance(); }
+  else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); retreat(); }
+});
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 50) dx < 0 ? advance() : retreat();
+});
+
+showSlide(0, 'forward');
+</script>
+
+</body>
+</html>
