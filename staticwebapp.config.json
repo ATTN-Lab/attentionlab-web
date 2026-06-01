@@ -14,6 +14,14 @@
   },
   "routes": [
     {
+      "route": "/pitch-deck.html",
+      "rewrite": "/pitch-deck.html"
+    },
+    {
+      "route": "/bbb-nuke-hero.html",
+      "rewrite": "/bbb-nuke-hero.html"
+    },
+    {
       "route": "/check-in",
       "rewrite": "/check-in/index.html"
     }
