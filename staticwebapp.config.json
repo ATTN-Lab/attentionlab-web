@@ -7,7 +7,9 @@
       "/favicon.svg",
       "/favicon-96x96.png",
       "/apple-touch-icon.png",
-      "/site.webmanifest"
+      "/site.webmanifest",
+      "/pitch-deck.html",
+      "/bbb-nuke-hero.html"
     ]
   },
   "routes": [
